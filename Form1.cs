@@ -24,14 +24,7 @@ namespace WindowsFormsApp2
             CalculateAndRender();
         }
 
-        private class Subject
-        {
-            public string Type { get; set; }
-            public string Code { get; set; }
-            public string Name { get; set; }
-            public int Credit { get; set; }
-            public string Grade { get; set; }
-        }
+        
 
         private class Requirement
         {
@@ -112,24 +105,53 @@ namespace WindowsFormsApp2
                 "교선 GEN2001 심리학개론 3 B";
         }
 
+        private class Subject
+        {
+            public string Type { get; set; }   // 이수구분 (전선, 전필, 대교 등)
+            public string Code { get; set; }   // 학수번호
+            public string Name { get; set; }   // 과목명
+            public double Credit { get; set; } // 학점 (0.5학점짜리 채플 등이 있으므로 double이 안전합니다)
+            public string Grade { get; set; }  // 성적
+        }
+
         private List<Subject> ParseSubjects(string text)
         {
             List<Subject> list = new List<Subject>();
-            string[] lines = text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            Regex regex = new Regex(@"(전필|전선|교필|교선)\s+([A-Za-z0-9\-]+)\s+(.+?)\s+(\d+)\s*([A-F][+0]?|P|F)?$", RegexOptions.Compiled);
 
-            foreach (string raw in lines)
+            // 실제 학사 포털 텍스트에 대응하는 정규식
+            string pattern =
+                @"(?<Type>[가-힣]{2})\s+" +
+                @"(?<Code>[a-zA-Z]{3}\d{4})\s+" +
+                @"(?<Section>[a-zA-Z0-9]{2})\s+" +
+                @"(?<NameAndProf>[\s\S]+?)\s+" +
+                @"(?<Credit>\d+(?:\.\d+)?)\s+" +
+                @"(?<Grade>[A-DF][+0]?|P|NP|W)\s+" +
+                @"(?<Score>\d+)\s+" +
+                @"(?:(?<Flag>[A-Z])\s+)?" +
+                @"(?<GPA>\d+\.\d{2})";
+
+            MatchCollection matches = Regex.Matches(text, pattern, RegexOptions.Multiline);
+
+            foreach (Match match in matches)
             {
-                string line = raw.Trim();
-                Match m = regex.Match(line);
-                if (m.Success)
+                // 과목명 추출 (교수명 제거 로직 포함)
+                string rawNameAndProf = match.Groups["NameAndProf"].Value;
+                string cleanedNameAndProf = Regex.Replace(rawNameAndProf, @"\s+", " ").Trim();
+                int lastSpaceIndex = cleanedNameAndProf.LastIndexOf(' ');
+                string courseName = lastSpaceIndex > 0 ? cleanedNameAndProf.Substring(0, lastSpaceIndex).Trim() : cleanedNameAndProf;
+
+                Subject s = new Subject
                 {
-                    Subject s = new Subject();
-                    s.Type = m.Groups[1].Value;
-                    s.Code = m.Groups[2].Value;
-                    s.Name = m.Groups[3].Value.Trim();
-                    s.Credit = int.Parse(m.Groups[4].Value);
-                    s.Grade = m.Groups[5].Success ? m.Groups[5].Value : "";
+                    Type = match.Groups["Type"].Value,
+                    Code = match.Groups["Code"].Value,
+                    Name = courseName,
+                    Credit = double.Parse(match.Groups["Credit"].Value), // int 대신 double 사용
+                    Grade = match.Groups["Grade"].Value
+                };
+
+                // F학점이나 NP, W(수강철회)는 이수 학점에서 제외하거나 따로 처리할 수 있도록 조건문 추가
+                if (s.Grade != "F" && s.Grade != "NP" && s.Grade != "W")
+                {
                     list.Add(s);
                 }
             }
@@ -141,11 +163,11 @@ namespace WindowsFormsApp2
             Requirement req = new Requirement();
             List<Subject> subjects = ParseSubjects(txtRawInput.Text);
 
-            int total = subjects.Sum(s => s.Credit);
-            int majorReq = subjects.Where(s => s.Type == "전필").Sum(s => s.Credit);
-            int majorElec = subjects.Where(s => s.Type == "전선").Sum(s => s.Credit);
-            int genReq = subjects.Where(s => s.Type == "교필").Sum(s => s.Credit);
-            int genElec = subjects.Where(s => s.Type == "교선").Sum(s => s.Credit);
+            double total = subjects.Sum(s => s.Credit);
+            double majorReq = subjects.Where(s => s.Type == "전필").Sum(s => s.Credit);
+            double majorElec = subjects.Where(s => s.Type == "전선" || s.Type == "전탐").Sum(s => s.Credit); // 전탐 등도 포함할지 고려
+            double genReq = subjects.Where(s => s.Type == "공기" || s.Type == "교기" || s.Type == "필교").Sum(s => s.Credit); // 공통기초, 필수교양 등
+            double genElec = subjects.Where(s => s.Type == "교선").Sum(s => s.Credit);
 
             dgvSubjects.Rows.Clear();
             foreach (Subject s in subjects)
@@ -178,9 +200,9 @@ namespace WindowsFormsApp2
                 : "미이수 필수과목: " + string.Join(", ", missingRequired.ToArray());
         }
 
-        private void AddStatusRow(string area, int required, int completed)
+        private void AddStatusRow(string area, double required, double completed)
         {
-            int lack = Math.Max(0, required - completed);
+            double lack = Math.Max(0, required - completed);
             string status = lack == 0 ? "충족" : "부족 " + lack + "학점";
             int idx = dgvAreaStatus.Rows.Add(area, required, completed, status);
             DataGridViewRow row = dgvAreaStatus.Rows[idx];
@@ -188,10 +210,10 @@ namespace WindowsFormsApp2
             row.Cells[3].Style.Font = new Font("맑은 고딕", 9F, FontStyle.Bold);
         }
 
-        private void SetCard(string key, int completed, int required)
+        private void SetCard(string key, double completed, double required)
         {
             SummaryCard card = cards[key];
-            int lack = Math.Max(0, required - completed);
+            double lack = Math.Max(0, required - completed);
             int pct = required == 0 ? 0 : Math.Min(100, (int)Math.Round(completed * 100.0 / required));
             card.Value.Text = completed + " / " + required;
             card.Progress.Value = pct;
@@ -219,7 +241,7 @@ namespace WindowsFormsApp2
             card.Progress.Value = overall ? 100 : 65;
         }
 
-        private string BuildShortageText(Requirement req, int total, int majorReq, int majorElec, int genReq, int genElec)
+        private string BuildShortageText(Requirement req, double total, double majorReq, double majorElec, double genReq, double genElec)
         {
             List<string> parts = new List<string>();
             AddShortage(parts, "총학점", req.TotalCredit, total);
@@ -231,9 +253,9 @@ namespace WindowsFormsApp2
             return "부족 학점: " + string.Join(" / ", parts.ToArray());
         }
 
-        private void AddShortage(List<string> parts, string name, int required, int completed)
+        private void AddShortage(List<string> parts, string name, double required, double completed)
         {
-            int lack = Math.Max(0, required - completed);
+            double lack = Math.Max(0, required - completed);
             if (lack > 0) parts.Add(name + " " + lack + "학점");
         }
     }
