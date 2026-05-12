@@ -1,0 +1,14 @@
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\WindowsFormsApp2.exe.config
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\WindowsFormsApp2.exe
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\WindowsFormsApp2.pdb
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\Newtonsoft.Json.dll
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\Newtonsoft.Json.xml
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.csproj.AssemblyReference.cache
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.Form1.resources
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.Properties.Resources.resources
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.csproj.GenerateResource.cache
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.csproj.CoreCompileInputs.cache
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsF.EA766B00.Up2Date
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.exe
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.pdb
+C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.exe.config
