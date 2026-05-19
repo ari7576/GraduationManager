@@ -1,4 +1,4 @@
-namespace WindowsFormsApp2
+﻿namespace WindowsFormsApp2
 {
     partial class Form1
     {
@@ -84,6 +84,7 @@ namespace WindowsFormsApp2
             this.txtDepartment = new System.Windows.Forms.TextBox();
             this.lblDepartment = new System.Windows.Forms.Label();
             this.btnPrint = new System.Windows.Forms.Button();
+            this.btnAdmin = new System.Windows.Forms.Button();
             this.lblSubtitle = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
             this.rootPanel.SuspendLayout();
@@ -111,6 +112,7 @@ namespace WindowsFormsApp2
             this.rootPanel.Controls.Add(this.subjectBox);
             this.rootPanel.Controls.Add(this.summaryBox);
             this.rootPanel.Controls.Add(this.inputBox);
+            this.rootPanel.Controls.Add(this.btnAdmin);
             this.rootPanel.Controls.Add(this.btnPrint);
             this.rootPanel.Controls.Add(this.lblSubtitle);
             this.rootPanel.Controls.Add(this.lblTitle);
@@ -829,6 +831,22 @@ namespace WindowsFormsApp2
             this.btnPrint.Text = "결과 인쇄";
             this.btnPrint.UseVisualStyleBackColor = false;
             // 
+            // btnAdmin
+            // 
+            this.btnAdmin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(42)))), ((int)(((byte)(76)))));
+            this.btnAdmin.FlatAppearance.BorderSize = 0;
+            this.btnAdmin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAdmin.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold);
+            this.btnAdmin.ForeColor = System.Drawing.Color.White;
+            this.btnAdmin.Location = new System.Drawing.Point(870, 25);
+            this.btnAdmin.Name = "btnAdmin";
+            this.btnAdmin.Size = new System.Drawing.Size(126, 34);
+            this.btnAdmin.TabIndex = 3;
+            this.btnAdmin.Text = "관리자 모드";
+            this.btnAdmin.UseVisualStyleBackColor = false;
+            this.btnAdmin.Click += new System.EventHandler(this.btnAdmin_Click);
+            // 
+            // 
             // lblSubtitle
             // 
             this.lblSubtitle.Font = new System.Drawing.Font("맑은 고딕", 9F);
@@ -837,7 +855,7 @@ namespace WindowsFormsApp2
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Size = new System.Drawing.Size(700, 24);
             this.lblSubtitle.TabIndex = 1;
-            this.lblSubtitle.Text = "CCC 담당: 사용자 입력 화면 구성 / 결과 시각화 / 충족·부족 항목 구분 표시";
+            this.lblSubtitle.Text = "";
             // 
             // lblTitle
             // 
@@ -946,6 +964,7 @@ namespace WindowsFormsApp2
         private System.Windows.Forms.TextBox txtDepartment;
         private System.Windows.Forms.Label lblDepartment;
         private System.Windows.Forms.Button btnPrint;
+        private System.Windows.Forms.Button btnAdmin;
         private System.Windows.Forms.Label lblSubtitle;
         private System.Windows.Forms.Label lblTitle;
     }

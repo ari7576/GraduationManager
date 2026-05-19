@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -64,6 +64,14 @@ namespace WindowsFormsApp2
             CalculateAndRender();
         }
 
+        private void btnAdmin_Click(object sender, EventArgs e)
+        {
+            using (AdminForm adminForm = new AdminForm())
+            {
+                adminForm.ShowDialog(this);
+            }
+        }
+
         private void BtnLoadFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -95,14 +103,14 @@ namespace WindowsFormsApp2
         private void LoadSampleText()
         {
             txtRawInput.Text =
-                "전필 SWE2001 자료구조 3 A+\r\n" +
-                "전필 SWE2002 알고리즘 3 A\r\n" +
-                "전필 SWE2003 운영체제 3 B+\r\n" +
-                "전선 SWE3001 컴퓨터네트워크 3 A\r\n" +
-                "전선 SWE3002 데이터베이스 3 B+\r\n" +
-                "교필 GEN1001 대학영어 2 A\r\n" +
-                "교필 GEN1002 글쓰기 2 B+\r\n" +
-                "교선 GEN2001 심리학개론 3 B";
+                "전필 SWE2001 01 자료구조 김교수 3 A+ 95 4.50\r\n" +
+                "전필 SWE2002 01 알고리즘 이교수 3 A 91 4.00\r\n" +
+                "전필 SWE2003 01 운영체제 박교수 3 B+ 88 3.50\r\n" +
+                "전선 SWE3001 01 컴퓨터네트워크 최교수 3 A 92 4.00\r\n" +
+                "전선 SWE3002 01 데이터베이스 정교수 3 B+ 87 3.50\r\n" +
+                "필교 GEN1001 01 대학영어 한교수 2 A 93 4.00\r\n" +
+                "필교 GEN1002 01 글쓰기 오교수 2 B+ 86 3.50\r\n" +
+                "교선 GEN2001 01 심리학개론 윤교수 3 B 82 3.00";
         }
 
         private class Subject
