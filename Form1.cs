@@ -135,7 +135,7 @@ namespace WindowsFormsApp2
                 @"(?<Section>[a-zA-Z0-9]{2})\s+" +
                 @"(?<NameAndProf>[\s\S]+?)\s+" +
                 @"(?<Credit>\d+(?:\.\d+)?)\s+" +
-                @"(?<Grade>[A-DF][+0]?|P|NP|W)\s+" +
+                @"(?<Grade>[A-DF][+0\-]?|P|NP|W)\s+" +
                 @"(?<Score>\d+)\s+" +
                 @"(?:(?<Flag>[A-Z])\s+)?" +
                 @"(?<GPA>\d+\.\d{2})";

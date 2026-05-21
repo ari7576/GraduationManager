@@ -75,7 +75,7 @@ namespace WindowsFormsApp2
 
                 // 1. 학점 요건 숫자 파싱 (기존과 동일, 정상 작동 확인됨)
                 string creditPattern =
-                    @"소프트웨어\s+" +
+                    @"(?<Type>[가-힣]{2})\s+" +
                     @"(?<GenReq>\d+)\s+" +
                     @"\d+\s+\d+\s+\d+\s+" +
                     @"(?<ExploreReq>\d+)\s+" +
