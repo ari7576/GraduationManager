@@ -260,16 +260,22 @@ namespace WindowsFormsApp2
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "JSON 파일|*.json";
-            sfd.FileName = "졸업요건.json";
-
-            if (sfd.ShowDialog() == DialogResult.OK)
+            try
             {
+                // SaveFileDialog 없이 프로그램 실행 폴더에 고정적으로 저장합니다.
+                string filePath = "졸업요건.json";
+
                 var data = new { 졸업요건 = requirements };
                 string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-                File.WriteAllText(sfd.FileName, json);
-                MessageBox.Show("저장되었습니다!");
+
+                // System.IO.File을 이용해 바로 덮어쓰기 저장
+                System.IO.File.WriteAllText(filePath, json);
+
+                MessageBox.Show("프로그램 폴더에 성공적으로 저장되었습니다!\n이제 학점 계산기에서 불러올 수 있습니다.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("저장 중 오류가 발생했습니다: " + ex.Message);
             }
         }
 

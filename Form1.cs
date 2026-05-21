@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System.IO;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -168,15 +170,45 @@ namespace WindowsFormsApp2
 
         private void CalculateAndRender()
         {
-            Requirement req = new Requirement();
+            // 1. 관리자 페이지에서 저장한 JSON 파일 불러오기
+            string jsonPath = "졸업요건.json";
+            if (!File.Exists(jsonPath))
+            {
+                MessageBox.Show("졸업요건.json 파일이 없습니다. 관리자 메뉴에서 요건을 먼저 저장해주세요.");
+                return;
+            }
+
+            // 2. JSON 역직렬화 (AdminForm에서 만든 구조 그대로 덮어씌우기)
+            string json = File.ReadAllText(jsonPath);
+            // Newtonsoft.Json의 익명 타입을 활용해 "졸업요건" 배열을 추출합니다.
+            var data = JsonConvert.DeserializeAnonymousType(json, new { 졸업요건 = new List<AdminForm.GraduationRequirement>() });
+
+            // 3. 콤보박스에서 선택된 학번과 일치하는 요건 찾기
+            if (cboYear.SelectedItem == null) return;
+            int selectedYear = int.Parse(cboYear.SelectedItem.ToString());
+
+            // 리스트 중 입학년도가 일치하는 데이터 1개만 뽑아옵니다.
+            AdminForm.GraduationRequirement req = data.졸업요건.FirstOrDefault(r => r.입학년도 == selectedYear);
+
+            if (req == null)
+            {
+                MessageBox.Show($"{selectedYear}학년도 졸업 요건 데이터가 관리자 페이지에 등록되지 않았습니다.");
+                return;
+            }
+
+            // 4. 성적표 텍스트 파싱 (내 이수 내역)
             List<Subject> subjects = ParseSubjects(txtRawInput.Text);
 
+            // 5. 실제 데이터 명칭에 맞춘 학점 계산 로직 (LINQ)
             double total = subjects.Sum(s => s.Credit);
             double majorReq = subjects.Where(s => s.Type == "전필").Sum(s => s.Credit);
-            double majorElec = subjects.Where(s => s.Type == "전선" || s.Type == "전탐").Sum(s => s.Credit); // 전탐 등도 포함할지 고려
-            double genReq = subjects.Where(s => s.Type == "공기" || s.Type == "교기" || s.Type == "필교").Sum(s => s.Credit); // 공통기초, 필수교양 등
-            double genElec = subjects.Where(s => s.Type == "교선").Sum(s => s.Credit);
+            double majorElec = subjects.Where(s => s.Type == "전선").Sum(s => s.Credit);
+            // 교양기초 역할: 공기, 교기, 필교 모두 합산
+            double genReq = subjects.Where(s => s.Type == "공기" || s.Type == "교기" || s.Type == "필교").Sum(s => s.Credit);
+            // 대학교양 역할: 대교
+            double genElec = subjects.Where(s => s.Type == "대교").Sum(s => s.Credit);
 
+            // 6. 데이터그리드뷰 업데이트
             dgvSubjects.Rows.Clear();
             foreach (Subject s in subjects)
             {
@@ -184,28 +216,49 @@ namespace WindowsFormsApp2
             }
 
             dgvAreaStatus.Rows.Clear();
-            AddStatusRow("총학점", req.TotalCredit, total);
-            AddStatusRow("전공필수", req.MajorRequired, majorReq);
-            AddStatusRow("전공선택", req.MajorElective, majorElec);
-            AddStatusRow("교양필수", req.GeneralRequired, genReq);
-            AddStatusRow("교양선택", req.GeneralElective, genElec);
+            // 하드코딩 숫자가 아닌 JSON에서 불러온 req의 값들로 표를 채웁니다.
+            AddStatusRow("총학점", req.총학점기준, total);
+            AddStatusRow("전공필수", req.전공필수, majorReq);
+            AddStatusRow("전공선택", req.전공선택, majorElec);
+            AddStatusRow("교양기초", req.교양기초, genReq);
+            // 참고: UI의 "교양선택" 패널을 임시로 "전공탐색" 기준으로 맞췄습니다. (필요 시 수정)
+            AddStatusRow("전공탐색(대교)", req.전공탐색, genElec);
 
-            SetCard("total", total, req.TotalCredit);
-            SetCard("majorReq", majorReq, req.MajorRequired);
-            SetCard("majorElec", majorElec, req.MajorElective);
-            SetCard("genReq", genReq, req.GeneralRequired);
-            SetCard("genElec", genElec, req.GeneralElective);
+            // 7. 요약 카드 UI 업데이트
+            SetCard("total", total, req.총학점기준);
+            SetCard("majorReq", majorReq, req.전공필수);
+            SetCard("majorElec", majorElec, req.전공선택);
+            SetCard("genReq", genReq, req.교양기초);
+            SetCard("genElec", genElec, req.전공탐색);
 
-            bool creditsOk = total >= req.TotalCredit && majorReq >= req.MajorRequired && majorElec >= req.MajorElective && genReq >= req.GeneralRequired && genElec >= req.GeneralElective;
+            // 8. 필수 과목 미이수 검사
             List<string> completedNames = subjects.Select(s => s.Name).ToList();
-            List<string> missingRequired = req.RequiredSubjects.Where(name => !completedNames.Contains(name)).ToList();
+            // JSON의 필수과목목록 중, 내가 들은 과목 이름에 포함되지 않은 것들만 뽑아냅니다.
+            List<string> missingRequired = req.필수과목목록.Where(name => !completedNames.Contains(name)).ToList();
+
+            // 모든 조건을 만족했는지 체크
+            bool creditsOk = total >= req.총학점기준 && majorReq >= req.전공필수 && majorElec >= req.전공선택 && genReq >= req.교양기초;
             bool overall = creditsOk && missingRequired.Count == 0;
             SetOverallCard(overall);
 
+            // 9. 하단 텍스트 업데이트
             lblShortage.Text = BuildShortageText(req, total, majorReq, majorElec, genReq, genElec);
             lblMissingRequired.Text = missingRequired.Count == 0
                 ? "미이수 필수과목: 없음"
                 : "미이수 필수과목: " + string.Join(", ", missingRequired.ToArray());
+        }
+
+        // Requirement 타입 대신 AdminForm.GraduationRequirement를 받도록 수정된 BuildShortageText
+        private string BuildShortageText(AdminForm.GraduationRequirement req, double total, double majorReq, double majorElec, double genReq, double genElec)
+        {
+            List<string> parts = new List<string>();
+            AddShortage(parts, "총학점", req.총학점기준, total);
+            AddShortage(parts, "전공필수", req.전공필수, majorReq);
+            AddShortage(parts, "전공선택", req.전공선택, majorElec);
+            AddShortage(parts, "교양기초", req.교양기초, genReq);
+            AddShortage(parts, "전공탐색", req.전공탐색, genElec);
+            if (parts.Count == 0) return "부족 학점: 없음";
+            return "부족 학점: " + string.Join(" / ", parts.ToArray());
         }
 
         private void AddStatusRow(string area, double required, double completed)
