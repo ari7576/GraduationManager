@@ -50,10 +50,24 @@ namespace WindowsFormsApp2
         private void InitializeCardReferences()
         {
             cards["total"] = new SummaryCard { Panel = pnlTotal, Title = lblTotalTitle, Value = lblTotalValue, Status = lblTotalStatus, Progress = prgTotal };
-            cards["majorReq"] = new SummaryCard { Panel = pnlMajorReq, Title = lblMajorReqTitle, Value = lblMajorReqValue, Status = lblMajorReqStatus, Progress = prgMajorReq };
-            cards["majorElec"] = new SummaryCard { Panel = pnlMajorElec, Title = lblMajorElecTitle, Value = lblMajorElecValue, Status = lblMajorElecStatus, Progress = prgMajorElec };
-            cards["genReq"] = new SummaryCard { Panel = pnlGenReq, Title = lblGenReqTitle, Value = lblGenReqValue, Status = lblGenReqStatus, Progress = prgGenReq };
-            cards["genElec"] = new SummaryCard { Panel = pnlGenElec, Title = lblGenElecTitle, Value = lblGenElecValue, Status = lblGenElecStatus, Progress = prgGenElec };
+
+            cards["liberalBasic"] = new SummaryCard { Panel = pnlLiberalBasic, Title = lblLiberalBasicTitle, Value = lblLiberalBasicValue, Status = lblLiberalBasicStatus, Progress = prgLiberalBasic };
+            cards["univReq"] = new SummaryCard { Panel = pnlUnivReq, Title = lblUnivReqTitle, Value = lblUnivReqValue, Status = lblUnivReqStatus, Progress = prgUnivReq };
+            cards["univElec"] = new SummaryCard { Panel = pnlUnivElec, Title = lblUnivElecTitle, Value = lblUnivElecValue, Status = lblUnivElecStatus, Progress = prgUnivElec };
+            cards["liberalTotal"] = new SummaryCard { Panel = pnlLiberalTotal, Title = lblLiberalTotalTitle, Value = lblLiberalTotalValue, Status = lblLiberalTotalStatus, Progress = prgLiberalTotal };
+
+            cards["exploreReq"] = new SummaryCard { Panel = pnlExploreReq, Title = lblExploreReqTitle, Value = lblExploreReqValue, Status = lblExploreReqStatus, Progress = prgExploreReq };
+            cards["exploreElec"] = new SummaryCard { Panel = pnlExploreElec, Title = lblExploreElecTitle, Value = lblExploreElecValue, Status = lblExploreElecStatus, Progress = prgExploreElec };
+            cards["exploreTotal"] = new SummaryCard { Panel = pnlExploreTotal, Title = lblExploreTotalTitle, Value = lblExploreTotalValue, Status = lblExploreTotalStatus, Progress = prgExploreTotal };
+
+            cards["firstMajorReq"] = new SummaryCard { Panel = pnlFirstMajorReq, Title = lblFirstMajorReqTitle, Value = lblFirstMajorReqValue, Status = lblFirstMajorReqStatus, Progress = prgFirstMajorReq };
+            cards["firstMajorElec"] = new SummaryCard { Panel = pnlFirstMajorElec, Title = lblFirstMajorElecTitle, Value = lblFirstMajorElecValue, Status = lblFirstMajorElecStatus, Progress = prgFirstMajorElec };
+            cards["firstMajorTotal"] = new SummaryCard { Panel = pnlFirstMajorTotal, Title = lblFirstMajorTotalTitle, Value = lblFirstMajorTotalValue, Status = lblFirstMajorTotalStatus, Progress = prgFirstMajorTotal };
+
+            cards["secondMajorReq"] = new SummaryCard { Panel = pnlSecondMajorReq, Title = lblSecondMajorReqTitle, Value = lblSecondMajorReqValue, Status = lblSecondMajorReqStatus, Progress = prgSecondMajorReq };
+            cards["secondMajorElec"] = new SummaryCard { Panel = pnlSecondMajorElec, Title = lblSecondMajorElecTitle, Value = lblSecondMajorElecValue, Status = lblSecondMajorElecStatus, Progress = prgSecondMajorElec };
+            cards["secondMajorTotal"] = new SummaryCard { Panel = pnlSecondMajorTotal, Title = lblSecondMajorTotalTitle, Value = lblSecondMajorTotalValue, Status = lblSecondMajorTotalStatus, Progress = prgSecondMajorTotal };
+
             cards["overall"] = new SummaryCard { Panel = pnlOverall, Title = lblOverallTitle, Value = lblOverallValue, Status = lblOverallStatus, Progress = prgOverall };
         }
 
@@ -105,14 +119,15 @@ namespace WindowsFormsApp2
         private void LoadSampleText()
         {
             txtRawInput.Text =
-                "전필 SWE2001 01 자료구조 김교수 3 A+ 95 4.50\r\n" +
-                "전필 SWE2002 01 알고리즘 이교수 3 A 91 4.00\r\n" +
-                "전필 SWE2003 01 운영체제 박교수 3 B+ 88 3.50\r\n" +
-                "전선 SWE3001 01 컴퓨터네트워크 최교수 3 A 92 4.00\r\n" +
-                "전선 SWE3002 01 데이터베이스 정교수 3 B+ 87 3.50\r\n" +
                 "필교 GEN1001 01 대학영어 한교수 2 A 93 4.00\r\n" +
-                "필교 GEN1002 01 글쓰기 오교수 2 B+ 86 3.50\r\n" +
-                "교선 GEN2001 01 심리학개론 윤교수 3 B 82 3.00";
+                "교선 GEN2001 01 심리학개론 윤교수 3 B 82 3.00\r\n" +
+                "대교 YHX1004 01 자바프로그래밍 김교수 3 A 92 4.00\r\n" +
+                "전탐필 YHF1001 01 문학입문 이교수 3 A 91 4.00\r\n" +
+                "전탐선 YHG1001 01 역사학입문 박교수 3 B+ 88 3.50\r\n" +
+                "전필 SWE2001 01 자료구조 김교수 3 A+ 95 4.50\r\n" +
+                "전선 SWE3001 01 컴퓨터네트워크 최교수 3 A 92 4.00\r\n" +
+                "2전필 SWE2002 01 알고리즘 이교수 3 A 91 4.00\r\n" +
+                "2전선 SWE3002 01 데이터베이스 정교수 3 B+ 87 3.50";
         }
 
         private class Subject
@@ -130,7 +145,7 @@ namespace WindowsFormsApp2
 
             // 실제 학사 포털 텍스트에 대응하는 정규식
             string pattern =
-                @"(?<Type>[가-힣]{2})\s+" +
+                @"(?<Type>[가-힣0-9]{2,5})\s+" +
                 @"(?<Code>[a-zA-Z]{3}\d{4})\s+" +
                 @"(?<Section>[a-zA-Z0-9]{2})\s+" +
                 @"(?<NameAndProf>[\s\S]+?)\s+" +
@@ -201,12 +216,23 @@ namespace WindowsFormsApp2
 
             // 5. 실제 데이터 명칭에 맞춘 학점 계산 로직 (LINQ)
             double total = subjects.Sum(s => s.Credit);
-            double majorReq = subjects.Where(s => s.Type == "전필").Sum(s => s.Credit);
-            double majorElec = subjects.Where(s => s.Type == "전선").Sum(s => s.Credit);
-            // 교양기초 역할: 공기, 교기, 필교 모두 합산
-            double genReq = subjects.Where(s => s.Type == "공기" || s.Type == "교기" || s.Type == "필교").Sum(s => s.Credit);
-            // 대학교양 역할: 대교
-            double genElec = subjects.Where(s => s.Type == "대교").Sum(s => s.Credit);
+
+            double liberalBasic = subjects.Where(s => IsType(s.Type, "공기", "교기", "필교", "교필")).Sum(s => s.Credit);
+            double universityRequired = subjects.Where(s => IsType(s.Type, "대필", "대교필")).Sum(s => s.Credit);
+            double universityElective = subjects.Where(s => IsType(s.Type, "대교", "대선", "교선")).Sum(s => s.Credit);
+            double liberalTotal = liberalBasic + universityRequired + universityElective;
+
+            double exploreRequired = subjects.Where(s => IsType(s.Type, "탐필", "전탐필")).Sum(s => s.Credit);
+            double exploreElective = subjects.Where(s => IsType(s.Type, "탐선", "전탐", "전탐선")).Sum(s => s.Credit);
+            double exploreTotal = exploreRequired + exploreElective;
+
+            double firstMajorRequired = subjects.Where(s => IsType(s.Type, "전필", "1전필", "제1전필")).Sum(s => s.Credit);
+            double firstMajorElective = subjects.Where(s => IsType(s.Type, "전선", "1전선", "제1전선")).Sum(s => s.Credit);
+            double firstMajorTotal = firstMajorRequired + firstMajorElective;
+
+            double secondMajorRequired = subjects.Where(s => IsType(s.Type, "복필", "2전필", "제2전필")).Sum(s => s.Credit);
+            double secondMajorElective = subjects.Where(s => IsType(s.Type, "복선", "2전선", "제2전선")).Sum(s => s.Credit);
+            double secondMajorTotal = secondMajorRequired + secondMajorElective;
 
             // 6. 데이터그리드뷰 업데이트
             dgvSubjects.Rows.Clear();
@@ -216,20 +242,44 @@ namespace WindowsFormsApp2
             }
 
             dgvAreaStatus.Rows.Clear();
-            // 하드코딩 숫자가 아닌 JSON에서 불러온 req의 값들로 표를 채웁니다.
-            AddStatusRow("총학점", req.총학점기준, total);
-            AddStatusRow("전공필수", req.전공필수, majorReq);
-            AddStatusRow("전공선택", req.전공선택, majorElec);
-            AddStatusRow("교양기초", req.교양기초, genReq);
-            // 참고: UI의 "교양선택" 패널을 임시로 "전공탐색" 기준으로 맞췄습니다. (필요 시 수정)
-            AddStatusRow("전공탐색(대교)", req.전공탐색, genElec);
+            AddStatusRow("총 이수학점", req.총학점기준, total);
+
+            AddStatusRow("교양기초", req.교양기초, liberalBasic);
+            AddStatusRowDisplayOnly("대학교양 필수", universityRequired);
+            AddStatusRowDisplayOnly("대학교양 선택", universityElective);
+            AddStatusRowDisplayOnly("교양 소계", liberalTotal);
+
+            AddStatusRowDisplayOnly("전공탐색 필수", exploreRequired);
+            AddStatusRowDisplayOnly("전공탐색 선택", exploreElective);
+            AddStatusRow("전공탐색 소계", req.전공탐색, exploreTotal);
+
+            AddStatusRow("제1전공 필수", req.전공필수, firstMajorRequired);
+            AddStatusRow("제1전공 선택", req.전공선택, firstMajorElective);
+            AddStatusRow("제1전공 소계", req.전공필수 + req.전공선택, firstMajorTotal);
+
+            AddStatusRow("제2전공 필수", req.전공필수, secondMajorRequired);
+            AddStatusRow("제2전공 선택", req.전공선택, secondMajorElective);
+            AddStatusRow("제2전공 소계", req.전공필수 + req.전공선택, secondMajorTotal);
 
             // 7. 요약 카드 UI 업데이트
             SetCard("total", total, req.총학점기준);
-            SetCard("majorReq", majorReq, req.전공필수);
-            SetCard("majorElec", majorElec, req.전공선택);
-            SetCard("genReq", genReq, req.교양기초);
-            SetCard("genElec", genElec, req.전공탐색);
+
+            SetCard("liberalBasic", liberalBasic, req.교양기초);
+            SetCardDisplayOnly("univReq", universityRequired);
+            SetCardDisplayOnly("univElec", universityElective);
+            SetCardDisplayOnly("liberalTotal", liberalTotal);
+
+            SetCardDisplayOnly("exploreReq", exploreRequired);
+            SetCardDisplayOnly("exploreElec", exploreElective);
+            SetCard("exploreTotal", exploreTotal, req.전공탐색);
+
+            SetCard("firstMajorReq", firstMajorRequired, req.전공필수);
+            SetCard("firstMajorElec", firstMajorElective, req.전공선택);
+            SetCard("firstMajorTotal", firstMajorTotal, req.전공필수 + req.전공선택);
+
+            SetCard("secondMajorReq", secondMajorRequired, req.전공필수);
+            SetCard("secondMajorElec", secondMajorElective, req.전공선택);
+            SetCard("secondMajorTotal", secondMajorTotal, req.전공필수 + req.전공선택);
 
             // 8. 필수 과목 미이수 검사
             List<string> completedNames = subjects.Select(s => s.Name).ToList();
@@ -237,28 +287,49 @@ namespace WindowsFormsApp2
             List<string> missingRequired = req.필수과목목록.Where(name => !completedNames.Contains(name)).ToList();
 
             // 모든 조건을 만족했는지 체크
-            bool creditsOk = total >= req.총학점기준 && majorReq >= req.전공필수 && majorElec >= req.전공선택 && genReq >= req.교양기초;
+            bool creditsOk = total >= req.총학점기준
+                && liberalBasic >= req.교양기초
+                && exploreTotal >= req.전공탐색
+                && firstMajorRequired >= req.전공필수
+                && firstMajorElective >= req.전공선택
+                && secondMajorRequired >= req.전공필수
+                && secondMajorElective >= req.전공선택;
             bool overall = creditsOk && missingRequired.Count == 0;
             SetOverallCard(overall);
 
             // 9. 하단 텍스트 업데이트
-            lblShortage.Text = BuildShortageText(req, total, majorReq, majorElec, genReq, genElec);
+            lblShortage.Text = BuildShortageText(req, total, liberalBasic, exploreTotal, firstMajorRequired, firstMajorElective, secondMajorRequired, secondMajorElective);
             lblMissingRequired.Text = missingRequired.Count == 0
                 ? "미이수 필수과목: 없음"
                 : "미이수 필수과목: " + string.Join(", ", missingRequired.ToArray());
         }
 
         // Requirement 타입 대신 AdminForm.GraduationRequirement를 받도록 수정된 BuildShortageText
-        private string BuildShortageText(AdminForm.GraduationRequirement req, double total, double majorReq, double majorElec, double genReq, double genElec)
+        private string BuildShortageText(AdminForm.GraduationRequirement req, double total, double liberalBasic, double exploreTotal, double firstMajorReq, double firstMajorElec, double secondMajorReq, double secondMajorElec)
         {
             List<string> parts = new List<string>();
-            AddShortage(parts, "총학점", req.총학점기준, total);
-            AddShortage(parts, "전공필수", req.전공필수, majorReq);
-            AddShortage(parts, "전공선택", req.전공선택, majorElec);
-            AddShortage(parts, "교양기초", req.교양기초, genReq);
-            AddShortage(parts, "전공탐색", req.전공탐색, genElec);
+            AddShortage(parts, "총 이수학점", req.총학점기준, total);
+            AddShortage(parts, "교양기초", req.교양기초, liberalBasic);
+            AddShortage(parts, "전공탐색 소계", req.전공탐색, exploreTotal);
+            AddShortage(parts, "제1전공 필수", req.전공필수, firstMajorReq);
+            AddShortage(parts, "제1전공 선택", req.전공선택, firstMajorElec);
+            AddShortage(parts, "제2전공 필수", req.전공필수, secondMajorReq);
+            AddShortage(parts, "제2전공 선택", req.전공선택, secondMajorElec);
             if (parts.Count == 0) return "부족 학점: 없음";
             return "부족 학점: " + string.Join(" / ", parts.ToArray());
+        }
+
+        private bool IsType(string value, params string[] targets)
+        {
+            return targets.Contains(value);
+        }
+
+        private void AddStatusRowDisplayOnly(string area, double completed)
+        {
+            int idx = dgvAreaStatus.Rows.Add(area, "-", completed, "이수 " + completed + "학점");
+            DataGridViewRow row = dgvAreaStatus.Rows[idx];
+            row.Cells[3].Style.ForeColor = Color.FromArgb(Navy);
+            row.Cells[3].Style.Font = new Font("맑은 고딕", 9F, FontStyle.Bold);
         }
 
         private void AddStatusRow(string area, double required, double completed)
@@ -269,6 +340,16 @@ namespace WindowsFormsApp2
             DataGridViewRow row = dgvAreaStatus.Rows[idx];
             row.Cells[3].Style.ForeColor = lack == 0 ? Color.FromArgb(Green) : Color.FromArgb(Red);
             row.Cells[3].Style.Font = new Font("맑은 고딕", 9F, FontStyle.Bold);
+        }
+
+        private void SetCardDisplayOnly(string key, double completed)
+        {
+            SummaryCard card = cards[key];
+            card.Value.Text = completed + " / -";
+            card.Status.Text = "이수 " + completed + "학점";
+            card.Status.ForeColor = Color.FromArgb(Navy);
+            card.Panel.BackColor = Color.FromArgb(248, 251, 255);
+            card.Progress.Value = 0;
         }
 
         private void SetCard(string key, double completed, double required)
