@@ -129,7 +129,7 @@
             this.txtDepartment = new System.Windows.Forms.TextBox();
             this.lblDepartment = new System.Windows.Forms.Label();
             this.btnAdmin = new System.Windows.Forms.Button();
-            this.btnPrint = new System.Windows.Forms.Button();
+            this.btnAnalysis = new System.Windows.Forms.Button();
             this.lblSubtitle = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
             this.rootPanel.SuspendLayout();
@@ -167,7 +167,7 @@
             this.rootPanel.Controls.Add(this.summaryBox);
             this.rootPanel.Controls.Add(this.inputBox);
             this.rootPanel.Controls.Add(this.btnAdmin);
-            this.rootPanel.Controls.Add(this.btnPrint);
+            this.rootPanel.Controls.Add(this.btnAnalysis);
             this.rootPanel.Controls.Add(this.lblSubtitle);
             this.rootPanel.Controls.Add(this.lblTitle);
             this.rootPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1349,18 +1349,19 @@
             this.btnAdmin.UseVisualStyleBackColor = false;
             this.btnAdmin.Click += new System.EventHandler(this.btnAdmin_Click);
             // 
-            // btnPrint
+            // btnAnalysis
             // 
-            this.btnPrint.BackColor = System.Drawing.Color.White;
-            this.btnPrint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPrint.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold);
-            this.btnPrint.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(95)))));
-            this.btnPrint.Location = new System.Drawing.Point(1010, 25);
-            this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(120, 34);
-            this.btnPrint.TabIndex = 2;
-            this.btnPrint.Text = "결과 인쇄";
-            this.btnPrint.UseVisualStyleBackColor = false;
+            this.btnAnalysis.BackColor = System.Drawing.Color.White;
+            this.btnAnalysis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAnalysis.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold);
+            this.btnAnalysis.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(95)))));
+            this.btnAnalysis.Location = new System.Drawing.Point(1010, 25);
+            this.btnAnalysis.Name = "btnAnalysis";
+            this.btnAnalysis.Size = new System.Drawing.Size(120, 34);
+            this.btnAnalysis.TabIndex = 2;
+            this.btnAnalysis.Text = "결과 분석";
+            this.btnAnalysis.UseVisualStyleBackColor = false;
+            this.btnAnalysis.Click += new System.EventHandler(this.btnAnalysis_Click);
             // 
             // lblSubtitle
             // 
@@ -1532,7 +1533,7 @@
         private System.Windows.Forms.TextBox txtDepartment;
         private System.Windows.Forms.Label lblDepartment;
         private System.Windows.Forms.Button btnAdmin;
-        private System.Windows.Forms.Button btnPrint;
+        private System.Windows.Forms.Button btnAnalysis;
         private System.Windows.Forms.Label lblSubtitle;
         private System.Windows.Forms.Label lblTitle;
     }

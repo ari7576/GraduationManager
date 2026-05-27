@@ -47,6 +47,19 @@ namespace WindowsFormsApp2
             public ProgressBar Progress;
         }
 
+        public class AnalysisItem
+        {
+            public string Area { get; set; }
+            public string Required { get; set; }
+            public string Completed { get; set; }
+            public string Status { get; set; }
+
+            public bool IsShortage
+            {
+                get { return Status != null && Status.Contains("부족"); }
+            }
+        }
+
         private void InitializeCardReferences()
         {
             cards["total"] = new SummaryCard { Panel = pnlTotal, Title = lblTotalTitle, Value = lblTotalValue, Status = lblTotalStatus, Progress = prgTotal };
@@ -86,6 +99,51 @@ namespace WindowsFormsApp2
             {
                 adminForm.ShowDialog(this);
             }
+        }
+
+        private void btnAnalysis_Click(object sender, EventArgs e)
+        {
+            // 현재 화면의 계산 결과를 기반으로 별도 분석 창을 엽니다.
+            // 메인 화면을 갈아엎지 않고, 사용자가 단계별로 결과를 이해하도록 돕는 CCC용 보조 화면입니다.
+            CalculateAndRender();
+
+            List<AnalysisItem> items = BuildAnalysisItemsFromGrid();
+            if (items.Count == 0)
+            {
+                MessageBox.Show("분석할 결과가 없습니다. 이수내역과 졸업요건을 확인한 뒤 다시 계산해주세요.");
+                return;
+            }
+
+            string studentInfo = txtDepartment.Text + " / " + cboYear.Text + "학번 / " + txtStudentName.Text;
+            using (AnalysisForm form = new AnalysisForm(items, studentInfo, lblMissingRequired.Text))
+            {
+                form.ShowDialog(this);
+            }
+        }
+
+        private List<AnalysisItem> BuildAnalysisItemsFromGrid()
+        {
+            List<AnalysisItem> items = new List<AnalysisItem>();
+            foreach (DataGridViewRow row in dgvAreaStatus.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                string area = Convert.ToString(row.Cells[0].Value);
+                string required = Convert.ToString(row.Cells[1].Value);
+                string completed = Convert.ToString(row.Cells[2].Value);
+                string status = Convert.ToString(row.Cells[3].Value);
+
+                if (string.IsNullOrWhiteSpace(area)) continue;
+
+                items.Add(new AnalysisItem
+                {
+                    Area = area,
+                    Required = string.IsNullOrWhiteSpace(required) ? "-" : required,
+                    Completed = string.IsNullOrWhiteSpace(completed) ? "0" : completed,
+                    Status = string.IsNullOrWhiteSpace(status) ? "확인 필요" : status
+                });
+            }
+            return items;
         }
 
         private void BtnLoadFile_Click(object sender, EventArgs e)
