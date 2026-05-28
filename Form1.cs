@@ -260,12 +260,23 @@ namespace WindowsFormsApp2
             if (cboYear.SelectedItem == null) return;
             int selectedYear = int.Parse(cboYear.SelectedItem.ToString());
 
-            // 리스트 중 입학년도가 일치하는 데이터 1개만 뽑아옵니다.
-            AdminForm.GraduationRequirement req = data.졸업요건.FirstOrDefault(r => r.입학년도 == selectedYear);
+            // 수정 - 입학년도 + 학과 고려
+            string selectedDept = txtDepartment.Text.Trim();
+
+            AdminForm.GraduationRequirement req = data.졸업요건
+                .FirstOrDefault(r => r.입학년도 == selectedYear && r.학과 == selectedDept);
 
             if (req == null)
             {
-                MessageBox.Show($"{selectedYear}학년도 졸업 요건 데이터가 관리자 페이지에 등록되지 않았습니다.");
+                List<string> registeredDepts = data.졸업요건.Select(r => r.학과).Distinct().ToList();
+                if (!registeredDepts.Contains(selectedDept))
+                {
+                    MessageBox.Show($"'{selectedDept}' 학과는 관리자 페이지에 등록되지 않은 학과입니다.\n\n등록된 학과: {string.Join(", ", registeredDepts)}");
+                }
+                else
+                {
+                    MessageBox.Show($"{selectedYear}학년도 '{selectedDept}' 졸업 요건 데이터가 등록되지 않았습니다.");
+                }
                 return;
             }
 
