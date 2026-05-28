@@ -1,62 +1,15 @@
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\WindowsFormsApp2.exe.config
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\WindowsFormsApp2.exe
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\WindowsFormsApp2.pdb
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\Newtonsoft.Json.dll
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\bin\Debug\Newtonsoft.Json.xml
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.csproj.AssemblyReference.cache
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.Form1.resources
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.Properties.Resources.resources
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.csproj.GenerateResource.cache
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.csproj.CoreCompileInputs.cache
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsF.EA766B00.Up2Date
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.exe
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.pdb
-C:\Users\castl\OneDrive\바탕 화면\c#실습\시험\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.exe.config
-<<<<<<< HEAD
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\bin\Debug\WindowsFormsApp2.exe.config
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\bin\Debug\WindowsFormsApp2.exe
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\bin\Debug\WindowsFormsApp2.pdb
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\bin\Debug\Newtonsoft.Json.dll
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\bin\Debug\Newtonsoft.Json.xml
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.AssemblyReference.cache
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.exe.config
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.Form1.resources
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.Properties.Resources.resources
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.GenerateResource.cache
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.CoreCompileInputs.cache
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsF.EA766B00.Up2Date
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.exe
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.pdb
-=======
-C:\Users\parkjinwoo\source\repos\GraduationManager\bin\Debug\WindowsFormsApp2.exe.config
-C:\Users\parkjinwoo\source\repos\GraduationManager\bin\Debug\WindowsFormsApp2.exe
-C:\Users\parkjinwoo\source\repos\GraduationManager\bin\Debug\WindowsFormsApp2.pdb
-C:\Users\parkjinwoo\source\repos\GraduationManager\bin\Debug\Newtonsoft.Json.dll
-C:\Users\parkjinwoo\source\repos\GraduationManager\bin\Debug\Newtonsoft.Json.xml
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.AssemblyReference.cache
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.exe.config
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.AdminForm.resources
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.Form1.resources
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.Properties.Resources.resources
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.GenerateResource.cache
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.CoreCompileInputs.cache
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsF.EA766B00.Up2Date
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.exe
-C:\Users\parkjinwoo\source\repos\GraduationManager\obj\Debug\WindowsFormsApp2.pdb
->>>>>>> 0a82ebef0dabf7aa2df3de27df322df2add64f46
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\GraduationManager\obj\Debug\WindowsFormsApp2.AdminForm.resources
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\bin\Debug\WindowsFormsApp2.exe.config
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\bin\Debug\WindowsFormsApp2.exe
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\bin\Debug\WindowsFormsApp2.pdb
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\bin\Debug\Newtonsoft.Json.dll
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\bin\Debug\Newtonsoft.Json.xml
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.AssemblyReference.cache
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.exe.config
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.AdminForm.resources
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.Form1.resources
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.Properties.Resources.resources
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.GenerateResource.cache
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.CoreCompileInputs.cache
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsF.EA766B00.Up2Date
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.exe
-C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.pdb
+C:\Users\sw\Source\Repos\GraduationManager\bin\Debug\WindowsFormsApp2.exe.config
+C:\Users\sw\Source\Repos\GraduationManager\bin\Debug\WindowsFormsApp2.exe
+C:\Users\sw\Source\Repos\GraduationManager\bin\Debug\WindowsFormsApp2.pdb
+C:\Users\sw\Source\Repos\GraduationManager\bin\Debug\Newtonsoft.Json.dll
+C:\Users\sw\Source\Repos\GraduationManager\bin\Debug\Newtonsoft.Json.xml
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.AssemblyReference.cache
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.exe.config
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.AdminForm.resources
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.Form1.resources
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.Properties.Resources.resources
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.GenerateResource.cache
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.csproj.CoreCompileInputs.cache
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsF.EA766B00.Up2Date
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.exe
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.pdb
