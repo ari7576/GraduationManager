@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -12,7 +13,7 @@ namespace WindowsFormsApp2
     public partial class Form1 : Form
     {
         private Dictionary<string, SummaryCard> cards = new Dictionary<string, SummaryCard>();
-
+        private string originalTranscriptText = "";
         private const int Navy = 0x102A4C;
         private const int Green = 0x249B45;
         private const int Red = 0xE53935;
@@ -149,11 +150,35 @@ namespace WindowsFormsApp2
         private void BtnLoadFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Title = "이수내역 텍스트 파일 선택";
-            dialog.Filter = "텍스트 파일 (*.txt)|*.txt|모든 파일 (*.*)|*.*";
+
+            dialog.Title = "성적표 파일 선택";
+            dialog.Filter = "PDF 파일 (*.pdf)|*.pdf|텍스트 파일 (*.txt)|*.txt";
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                txtRawInput.Text = System.IO.File.ReadAllText(dialog.FileName);
+                try
+                {
+                    string ext = Path.GetExtension(dialog.FileName).ToLower();
+                    string text = "";
+
+                    if (ext == ".pdf")
+                    {
+                        text = PdfReaderHelper.ReadPdf(dialog.FileName);
+                    }
+                    else if (ext == ".txt")
+                    {
+                        text = File.ReadAllText(dialog.FileName);
+                    }
+
+                    originalTranscriptText = text;
+                    txtRawInput.Text = FormatTranscriptText(text);
+
+                    MessageBox.Show("성적표를 불러왔습니다.\n계산하기 버튼을 눌러주세요.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("파일을 읽는 중 오류가 발생했습니다.\n" + ex.Message);
+                }
             }
         }
 
@@ -201,46 +226,82 @@ namespace WindowsFormsApp2
         {
             List<Subject> list = new List<Subject>();
 
-            // 실제 학사 포털 텍스트에 대응하는 정규식
-            string pattern =
-                @"(?<Type>[가-힣0-9]{2,5})\s+" +
-                @"(?<Code>[a-zA-Z]{3}\d{4})\s+" +
-                @"(?<Section>[a-zA-Z0-9]{2})\s+" +
-                @"(?<NameAndProf>[\s\S]+?)\s+" +
-                @"(?<Credit>\d+(?:\.\d+)?)\s+" +
-                @"(?<Grade>[A-DF][+0\-]?|P|NP|W)\s+" +
-                @"(?<Score>\d+)\s+" +
-                @"(?:(?<Flag>[A-Z])\s+)?" +
-                @"(?<GPA>\d+\.\d{2})";
+            if (string.IsNullOrWhiteSpace(text))
+                return list;
 
-            MatchCollection matches = Regex.Matches(text, pattern, RegexOptions.Multiline);
+            string raw = text.Replace("\r", "")
+                             .Replace("\n", "")
+                             .Replace(" ", "")
+                             .Replace("\t", "");
+
+            string pattern =
+                @"(?<Type>전필|전선|전탐|필교|교기|대교|공기|교선|대선)" +
+                @"(?<Code>[A-Z]{2,4}\d{6})" +
+                @"(?<NameAndProf>.+?)" +
+                @"(?<Credit>\d(?:\.5)?)" +
+                @"(?<Grade>A\+|A0|A-|B\+|B0|B-|C\+|C0|C-|D\+|D0|D-|F|P|NP|W)" +
+                @"(?<Score>\d{1,3}(?:\.\d{2})?)";
+
+            MatchCollection matches = Regex.Matches(raw, pattern);
 
             foreach (Match match in matches)
             {
-                // 과목명 추출 (교수명 제거 로직 포함)
-                string rawNameAndProf = match.Groups["NameAndProf"].Value;
-                string cleanedNameAndProf = Regex.Replace(rawNameAndProf, @"\s+", " ").Trim();
-                int lastSpaceIndex = cleanedNameAndProf.LastIndexOf(' ');
-                string courseName = lastSpaceIndex > 0 ? cleanedNameAndProf.Substring(0, lastSpaceIndex).Trim() : cleanedNameAndProf;
+                string type = match.Groups["Type"].Value;
+                string code = match.Groups["Code"].Value;
+                string nameAndProf = match.Groups["NameAndProf"].Value;
+                string creditText = match.Groups["Credit"].Value;
+                string grade = match.Groups["Grade"].Value;
 
-                Subject s = new Subject
-                {
-                    Type = match.Groups["Type"].Value,
-                    Code = match.Groups["Code"].Value,
-                    Name = courseName,
-                    Credit = double.Parse(match.Groups["Credit"].Value), // int 대신 double 사용
-                    Grade = match.Groups["Grade"].Value
-                };
+                if (!double.TryParse(creditText, out double credit))
+                    continue;
 
-                // F학점이나 NP, W(수강철회)는 이수 학점에서 제외하거나 따로 처리할 수 있도록 조건문 추가
-                if (s.Grade != "F" && s.Grade != "NP" && s.Grade != "W")
+                if (grade == "F" || grade == "NP" || grade == "W")
+                    continue;
+
+                list.Add(new Subject
                 {
-                    list.Add(s);
-                }
+                    Type = NormalizeType(type),
+                    Code = code,
+                    Name = nameAndProf,
+                    Credit = credit,
+                    Grade = grade
+                });
             }
+
             return list;
         }
+        private string FormatTranscriptText(string rawText)
+        {
+            List<Subject> subjects = ParseSubjects(rawText);
 
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("===== 성적표 분석 결과 =====");
+            sb.AppendLine();
+
+            foreach (Subject s in subjects)
+            {
+                sb.AppendLine($"[{s.Type}] {s.Code}");
+                sb.AppendLine($"과목명 : {s.Name}");
+                sb.AppendLine($"학점   : {s.Credit}");
+                sb.AppendLine($"성적   : {s.Grade}");
+                sb.AppendLine("----------------------------");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"총 인식 과목 수 : {subjects.Count}");
+            sb.AppendLine($"총 이수 학점   : {subjects.Sum(x => x.Credit)}");
+
+            return sb.ToString();
+        }
+        private string NormalizeType(string type)
+        {
+            if (type == "공기") return "교기";
+            if (type == "교선") return "대교";
+            if (type == "대선") return "대교";
+
+            return type;
+        }
         private void CalculateAndRender()
         {
             // 1. 관리자 페이지에서 저장한 JSON 파일 불러오기
@@ -260,28 +321,21 @@ namespace WindowsFormsApp2
             if (cboYear.SelectedItem == null) return;
             int selectedYear = int.Parse(cboYear.SelectedItem.ToString());
 
-            // 수정 - 입학년도 + 학과 고려
-            string selectedDept = txtDepartment.Text.Trim();
-
-            AdminForm.GraduationRequirement req = data.졸업요건
-                .FirstOrDefault(r => r.입학년도 == selectedYear && r.학과 == selectedDept);
+            // 리스트 중 입학년도가 일치하는 데이터 1개만 뽑아옵니다.
+            AdminForm.GraduationRequirement req = data.졸업요건.FirstOrDefault(r => r.입학년도 == selectedYear);
 
             if (req == null)
             {
-                List<string> registeredDepts = data.졸업요건.Select(r => r.학과).Distinct().ToList();
-                if (!registeredDepts.Contains(selectedDept))
-                {
-                    MessageBox.Show($"'{selectedDept}' 학과는 관리자 페이지에 등록되지 않은 학과입니다.\n\n등록된 학과: {string.Join(", ", registeredDepts)}");
-                }
-                else
-                {
-                    MessageBox.Show($"{selectedYear}학년도 '{selectedDept}' 졸업 요건 데이터가 등록되지 않았습니다.");
-                }
+                MessageBox.Show($"{selectedYear}학년도 졸업 요건 데이터가 관리자 페이지에 등록되지 않았습니다.");
                 return;
             }
 
             // 4. 성적표 텍스트 파싱 (내 이수 내역)
-            List<Subject> subjects = ParseSubjects(txtRawInput.Text);
+            string parseTarget = string.IsNullOrWhiteSpace(originalTranscriptText)
+                ? txtRawInput.Text
+                : originalTranscriptText;
+
+            List<Subject> subjects = ParseSubjects(parseTarget);
 
             // 5. 실제 데이터 명칭에 맞춘 학점 계산 로직 (LINQ)
             double total = subjects.Sum(s => s.Credit);
@@ -351,9 +405,10 @@ namespace WindowsFormsApp2
             SetCard("secondMajorTotal", secondMajorTotal, req.전공필수 + req.전공선택);
 
             // 8. 필수 과목 미이수 검사
-            List<string> completedNames = subjects.Select(s => s.Name).ToList();
-            // JSON의 필수과목목록 중, 내가 들은 과목 이름에 포함되지 않은 것들만 뽑아냅니다.
-            List<string> missingRequired = req.필수과목목록.Where(name => !completedNames.Contains(name)).ToList();
+            List<string> completedKeys = subjects.Select(s => NormalizeSubjectKey(s.Code + " " + s.Name)).ToList();
+
+            List<string> missingRequired = req.필수과목목록
+                .Where(required => !completedKeys.Any(done => done.Contains(NormalizeSubjectKey(required)) | NormalizeSubjectKey(required).Contains(done))).ToList();
 
             // 모든 조건을 만족했는지 체크
             bool creditsOk = total >= req.총학점기준
@@ -442,6 +497,13 @@ namespace WindowsFormsApp2
             }
         }
 
+        private string NormalizeSubjectKey(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return "";
+
+            return Regex.Replace(text, @"[^가-힣A-Za-z0-9]", "").ToUpper();
+        }
         private void SetOverallCard(bool overall)
         {
             SummaryCard card = cards["overall"];
