@@ -15,27 +15,6 @@ namespace WindowsFormsApp2
         public AdminForm()
         {
             InitializeComponent();
-            LoadSavedData();
-
-        }
-
-        private void LoadSavedData()
-        {
-            try
-            {
-                string filePath = "졸업요건.json";
-                if (File.Exists(filePath))
-                {
-                    string json = File.ReadAllText(filePath);
-                    var data = JsonConvert.DeserializeObject<dynamic>(json);
-                    requirements = JsonConvert.DeserializeObject<List<GraduationRequirement>>(data["졸업요건"].ToString());
-                    RefreshGrid();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("저장된 데이터를 불러오는 중 오류: " + ex.Message);
-            }
         }
 
         public class Subject
