@@ -1,4 +1,4 @@
-namespace WindowsFormsApp2
+﻿namespace WindowsFormsApp2
 {
     partial class AnalysisForm
     {
@@ -88,7 +88,7 @@ namespace WindowsFormsApp2
             this.lblSubTitle.Name = "lblSubTitle";
             this.lblSubTitle.Size = new System.Drawing.Size(850, 28);
             this.lblSubTitle.TabIndex = 1;
-            this.lblSubTitle.Text = "표를 그대로 반복하지 않고, 핵심 결과 → 부족 영역 → 영역별 진행률 → 다음 행동 순서로 시각화합니다.";
+            this.lblSubTitle.Text = "";
             // 
             // lblTitle
             // 
@@ -138,7 +138,7 @@ namespace WindowsFormsApp2
             this.lblStepGuide.Name = "lblStepGuide";
             this.lblStepGuide.Size = new System.Drawing.Size(740, 30);
             this.lblStepGuide.TabIndex = 0;
-            this.lblStepGuide.Text = "다음 버튼을 눌러 단계별로 확인하세요.";
+            this.lblStepGuide.Text = "";
             this.lblStepGuide.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnPrev

@@ -19,7 +19,7 @@ namespace WindowsFormsApp2
             "1/4 전체 요약",
             "2/4 부족 영역 집중",
             "3/4 영역별 진행률",
-            "4/4 다음 행동 안내"
+            "4/4 미이수 과목 안내"
         };
 
         private readonly Color navy = Color.FromArgb(16, 42, 76);
@@ -111,9 +111,7 @@ namespace WindowsFormsApp2
             lblStepBadge.Text = stepTitles[currentStep];
             btnPrev.Enabled = currentStep > 0;
             btnNext.Enabled = currentStep < 3;
-            lblStepGuide.Text = currentStep == 3
-                ? "마지막 단계입니다. 학생에게 안내할 다음 행동을 확인하세요."
-                : "다음 버튼을 눌러 결과를 순서대로 확인하세요.";
+            lblStepGuide.Text = "";
 
             if (currentStep == 0) RenderSummaryStep();
             else if (currentStep == 1) RenderShortageStep();
@@ -126,14 +124,14 @@ namespace WindowsFormsApp2
         private void RenderSummaryStep()
         {
             TableLayoutPanel root = CreateRootLayout(1, 2);
-            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             contentPanel.Controls.Add(root);
 
             Label intro = new Label
             {
                 Dock = DockStyle.Fill,
-                Text = "졸업요건은 큰 덩어리별로 먼저 확인하는 것이 가장 이해하기 쉽습니다.\r\n교양 소계 → 전공탐색 소계 → 제1전공 소계 → 제2전공 소계 순서로 부족 여부를 확인하세요.",
+                Text = "영역별 소계",
                 Font = new Font("맑은 고딕", 10.5F, FontStyle.Bold),
                 ForeColor = navy,
                 BackColor = Color.White,
@@ -175,7 +173,7 @@ namespace WindowsFormsApp2
 
             Panel chartCard = CreateCard();
             root.Controls.Add(chartCard, 0, 0);
-            AddSectionTitle(chartCard, "부족 학점 시각화");
+            AddSectionTitle(chartCard, "부족 학점");
             chartCard.Controls.Add(CreateShortageBarChart(shortage));
 
             Panel guide = CreateCard();
@@ -193,7 +191,7 @@ namespace WindowsFormsApp2
 
             if (shortage.Count == 0)
             {
-                list.Controls.Add(CreateMessageCard("부족 영역 없음", "현재 부족한 영역이 없습니다. 다음 단계에서 전체 영역 진행률을 확인하세요.", green));
+                list.Controls.Add(CreateMessageCard("부족 영역 없음", "현재 부족한 영역이 없습니다.", green));
             }
             else
             {
@@ -406,9 +404,9 @@ namespace WindowsFormsApp2
         {
             if (missingRequiredText.Contains("없음"))
             {
-                return "미이수 필수과목: 없음\r\n\r\n필수 과목 조건은 현재 입력된 이수내역 기준으로 충족된 상태입니다.";
+                return "미이수 필수과목: 없음";
             }
-            return missingRequiredText + "\r\n\r\n위 과목은 졸업요건에서 필수로 요구되는 과목입니다. 다음 수강신청에서 우선 확인하세요.";
+            return missingRequiredText;
         }
 
         private string BuildRecommendationGuide()
@@ -419,7 +417,7 @@ namespace WindowsFormsApp2
             if (shortage.Count == 0)
             {
                 lines.Add("부족 학점 영역은 없습니다.");
-                lines.Add("인증요건과 실제 졸업요건표 기준만 추가 확인하세요.");
+                lines.Add("추천 과목이 없습니다.");
                 return string.Join("\r\n", lines.ToArray());
             }
 
@@ -755,13 +753,13 @@ namespace WindowsFormsApp2
         {
             if (shortage.Count == 0)
             {
-                return "현재 입력된 이수내역 기준으로 부족 영역은 없습니다.\r\n졸업 전 인증요건과 관리자 졸업요건 데이터만 다시 확인하세요.";
+                return "현재 입력된 이수내역 기준으로 부족 영역은 없습니다.";
             }
 
             Form1.AnalysisItem first = shortage.First();
-            return "현재 가장 먼저 확인할 영역은 [" + first.Area + "]입니다.\r\n" +
-                   first.Status + " 상태이므로 다음 수강신청에서 해당 영역 과목을 우선 배치하세요.\r\n\r\n" +
-                   "부족 영역 전체: " + string.Join(", ", shortage.Select(i => i.Area).ToArray());
+            return "우선 확인 영역: " + first.Area + "\r\n" +
+                   "상태: " + first.Status + "\r\n" +
+                   "부족 영역: " + string.Join(", ", shortage.Select(i => i.Area).ToArray());
         }
 
         private Form1.AnalysisItem GetTotalItem()

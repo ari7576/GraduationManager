@@ -1371,7 +1371,7 @@
             this.lblSubtitle.Name = "lblSubtitle";
             this.lblSubtitle.Size = new System.Drawing.Size(840, 24);
             this.lblSubtitle.TabIndex = 1;
-            this.lblSubtitle.Text = "CCC 담당: 세분화된 이수구분별 졸업요건 현황 표시 / 제1전공·제2전공 분리";
+            this.lblSubtitle.Text = "";
             // 
             // lblTitle
             // 
