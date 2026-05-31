@@ -17,10 +17,8 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.rootPanel = new System.Windows.Forms.Panel();
             this.guideBox = new System.Windows.Forms.GroupBox();
             this.lblMissingRequired = new System.Windows.Forms.Label();
@@ -115,6 +113,8 @@
             this.lblOverallValue = new System.Windows.Forms.Label();
             this.lblOverallTitle = new System.Windows.Forms.Label();
             this.inputBox = new System.Windows.Forms.GroupBox();
+            this.cboTrack = new System.Windows.Forms.ComboBox();
+            this.lblTrack = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnCalculate = new System.Windows.Forms.Button();
             this.txtRawInput = new System.Windows.Forms.TextBox();
@@ -132,8 +132,6 @@
             this.btnAnalysis = new System.Windows.Forms.Button();
             this.lblSubtitle = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.lblTrack = new System.Windows.Forms.Label();
-            this.cboTrack = new System.Windows.Forms.ComboBox();
             this.rootPanel.SuspendLayout();
             this.guideBox.SuspendLayout();
             this.statusBox.SuspendLayout();
@@ -230,23 +228,15 @@
             this.dgvAreaStatus.AllowUserToDeleteRows = false;
             this.dgvAreaStatus.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvAreaStatus.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(241)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("맑은 고딕", 10F, System.Drawing.FontStyle.Bold);
-            this.dgvAreaStatus.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(241)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("맑은 고딕", 10F, System.Drawing.FontStyle.Bold);
+            this.dgvAreaStatus.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvAreaStatus.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAreaStatus.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colArea,
             this.colRequired,
             this.colCompleted,
             this.colStatus});
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(101)))), ((int)(((byte)(201)))));
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAreaStatus.DefaultCellStyle = dataGridViewCellStyle6;
             this.dgvAreaStatus.EnableHeadersVisualStyles = false;
             this.dgvAreaStatus.Location = new System.Drawing.Point(18, 30);
             this.dgvAreaStatus.Name = "dgvAreaStatus";
@@ -299,9 +289,9 @@
             this.dgvSubjects.AllowUserToDeleteRows = false;
             this.dgvSubjects.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvSubjects.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(241)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("맑은 고딕", 10F, System.Drawing.FontStyle.Bold);
-            this.dgvSubjects.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(241)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("맑은 고딕", 10F, System.Drawing.FontStyle.Bold);
+            this.dgvSubjects.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvSubjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSubjects.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colType,
@@ -309,14 +299,6 @@
             this.colName,
             this.colCredit,
             this.colGrade});
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("맑은 고딕", 9F);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(101)))), ((int)(((byte)(201)))));
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvSubjects.DefaultCellStyle = dataGridViewCellStyle8;
             this.dgvSubjects.EnableHeadersVisualStyles = false;
             this.dgvSubjects.Location = new System.Drawing.Point(18, 30);
             this.dgvSubjects.Name = "dgvSubjects";
@@ -325,6 +307,7 @@
             this.dgvSubjects.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSubjects.Size = new System.Drawing.Size(574, 212);
             this.dgvSubjects.TabIndex = 0;
+            this.dgvSubjects.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSubjects_CellDoubleClick);
             // 
             // colType
             // 
@@ -1205,6 +1188,26 @@
             this.inputBox.TabStop = false;
             this.inputBox.Text = "학생 정보 및 이수내역 입력";
             // 
+            // cboTrack
+            // 
+            this.cboTrack.FormattingEnabled = true;
+            this.cboTrack.Location = new System.Drawing.Point(107, 107);
+            this.cboTrack.Name = "cboTrack";
+            this.cboTrack.Size = new System.Drawing.Size(121, 25);
+            this.cboTrack.TabIndex = 14;
+            this.cboTrack.Visible = false;
+            // 
+            // lblTrack
+            // 
+            this.lblTrack.AutoSize = true;
+            this.lblTrack.Location = new System.Drawing.Point(18, 110);
+            this.lblTrack.Name = "lblTrack";
+            this.lblTrack.Size = new System.Drawing.Size(74, 19);
+            this.lblTrack.TabIndex = 13;
+            this.lblTrack.Text = "트랙 선택:";
+            this.lblTrack.Visible = false;
+            this.lblTrack.Click += new System.EventHandler(this.label1_Click);
+            // 
             // btnClear
             // 
             this.btnClear.BackColor = System.Drawing.Color.White;
@@ -1393,26 +1396,6 @@
             this.lblTitle.Size = new System.Drawing.Size(760, 42);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "원폼 학점 계산 프로그램 - 학생 졸업요건 판정 화면";
-            // 
-            // lblTrack
-            // 
-            this.lblTrack.AutoSize = true;
-            this.lblTrack.Location = new System.Drawing.Point(18, 110);
-            this.lblTrack.Name = "lblTrack";
-            this.lblTrack.Size = new System.Drawing.Size(74, 19);
-            this.lblTrack.TabIndex = 13;
-            this.lblTrack.Text = "트랙 선택:";
-            this.lblTrack.Visible = false;
-            this.lblTrack.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // cboTrack
-            // 
-            this.cboTrack.FormattingEnabled = true;
-            this.cboTrack.Location = new System.Drawing.Point(107, 107);
-            this.cboTrack.Name = "cboTrack";
-            this.cboTrack.Size = new System.Drawing.Size(121, 25);
-            this.cboTrack.TabIndex = 14;
-            this.cboTrack.Visible = false;
             // 
             // Form1
             // 

@@ -1,17 +1,21 @@
 ﻿using Newtonsoft.Json;
-using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using static WindowsFormsApp2.AdminForm;
 
 namespace WindowsFormsApp2
 {
+
     public partial class Form1 : Form
     {
+        private List<Subject> subjects = new List<Subject>();
         private Dictionary<string, SummaryCard> cards = new Dictionary<string, SummaryCard>();
         private string originalTranscriptText = "";
         private const int Navy = 0x102A4C;
@@ -27,7 +31,7 @@ namespace WindowsFormsApp2
             CalculateAndRender();
         }
 
-
+        public static Dictionary<string, string> userManualOverrides = new Dictionary<string, string>();
         private void cboTrack_SelectedIndexChanged(object sender, EventArgs e)
         {
             // 콤보박스가 생성되기 전이거나 값이 비어있을 때 발생하는 오류 방지
@@ -236,43 +240,48 @@ namespace WindowsFormsApp2
             if (string.IsNullOrWhiteSpace(text))
                 return list;
 
-            string raw = text.Replace("\r", "")
-                             .Replace("\n", "")
-                             .Replace(" ", "")
-                             .Replace("\t", "");
+            // 💡 1. 텍스트를 하나로 뭉치지 않고, 안전하게 '줄 단위'로 쪼갭니다.
+            string raw = text.Replace("\r", "").Replace("\t", " ");
+            string[] lines = raw.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
+            // 💡 2. 어떤 이수구분이든(전탐필, 트랙전선 등) 알아서 잡도록 패턴을 완전 유연화!
             string pattern =
-                @"(?<Type>전필|전선|전탐|필교|교기|대교|공기|교선|대선)" +
-                @"(?<Code>[A-Z]{2,4}\d{6})" +
-                @"(?<NameAndProf>.+?)" +
-                @"(?<Credit>\d(?:\.5)?)" +
-                @"(?<Grade>A\+|A0|A-|B\+|B0|B-|C\+|C0|C-|D\+|D0|D-|F|P|NP|W)" +
-                @"(?<Score>\d{1,3}(?:\.\d{2})?)";
-
-            MatchCollection matches = Regex.Matches(raw, pattern);
-
-            foreach (Match match in matches)
+                @"(?<Type>[가-힣0-9]{2,5})\s+" +       // 1. 첫 번째는 무조건 이수구분
+                @"(?<Code>[A-Za-z]{2,5}\d{4,6})\s+" +  // 2. 두 번째는 학수번호 (이걸 기준으로 잡음)
+                @"(?<Name>.+?)\s+" +                  // 3. 그다음이 과목명
+                @"(?<Credit>\d)\s+" +                 // 4. 숫자가 오면 학점
+                @"(?<Grade>[A-F][+0-]?|P)";           // 5. 마지막 성적
+            foreach (string line in lines)
             {
-                string type = match.Groups["Type"].Value;
-                string code = match.Groups["Code"].Value;
-                string nameAndProf = match.Groups["NameAndProf"].Value;
-                string creditText = match.Groups["Credit"].Value;
-                string grade = match.Groups["Grade"].Value;
+                Match match = Regex.Match(line, pattern);
 
-                if (!double.TryParse(creditText, out double credit))
-                    continue;
-
-                if (grade == "F" || grade == "NP" || grade == "W")
-                    continue;
-
-                list.Add(new Subject
+                if (match.Success)
                 {
-                    Type = NormalizeType(type),
-                    Code = code,
-                    Name = nameAndProf,
-                    Credit = credit,
-                    Grade = grade
-                });
+                    string type = match.Groups["Type"].Value;
+                    string code = match.Groups["Code"].Value;
+                    string nameAndProf = match.Groups["NameAndProf"].Value.Trim();
+                    string creditText = match.Groups["Credit"].Value;
+                    string grade = match.Groups["Grade"].Value;
+
+                    if (!double.TryParse(creditText, out double credit))
+                        continue;
+
+                    // F, NP, W 등 미이수 과목은 계산에서 제외
+                    if (grade == "F" || grade == "NP" || grade == "W")
+                        continue;
+
+                    // 과목명과 교수명 분리 (첫 번째 공백 기준 앞부분만 사용)
+                    string cleanName = nameAndProf.Trim();
+
+                    list.Add(new Subject
+                    {
+                        Type = NormalizeType(type),
+                        Code = code,
+                        Name = cleanName,
+                        Credit = credit,
+                        Grade = grade
+                    });
+                }
             }
 
             return list;
@@ -386,33 +395,46 @@ namespace WindowsFormsApp2
                 cboTrack.Visible = false;
             }
 
-            // 4. 성적표 텍스트 파싱 (내 이수 내역)
             string parseTarget = string.IsNullOrWhiteSpace(originalTranscriptText)
                 ? txtRawInput.Text
                 : originalTranscriptText;
 
-            List<Subject> subjects = ParseSubjects(parseTarget);
+            subjects = ParseSubjects(parseTarget);
+
+            // 💡 [핵심] 성적표 구분(대교)보다 졸업요건표 구분(전공탐색)을 우선시하여 강제 덮어쓰기!
+            if (req.코드매핑 != null)
+            {
+                foreach (Subject s in subjects)
+                {
+                    // 💡 과목 코드(s.Code)가 맵핑 데이터에 있는지 먼저 확인!
+                    if (req.코드매핑.ContainsKey(s.Code))
+                    {
+                        s.Type = req.코드매핑[s.Code]; // 졸업요건 표에 적힌 진짜 이수구분으로 덮어씀!
+                    }
+                }
+            }
 
             // 5. 실제 데이터 명칭에 맞춘 학점 계산 로직 (LINQ)
+            // 💡 IsType 안에 새로 들어올 수 있는 단어들(트랙전필, 전공탐색 등)을 꼼꼼하게 추가했습니다.
             double total = subjects.Sum(s => s.Credit);
 
-            double liberalBasic = subjects.Where(s => IsType(s.Type, "공기", "교기", "필교", "교필")).Sum(s => s.Credit);
+            double liberalBasic = subjects.Where(s => IsType(s.Type, "공기", "교기", "필교", "교필", "교양기초")).Sum(s => s.Credit);
             double universityRequired = subjects.Where(s => IsType(s.Type, "대필", "대교필")).Sum(s => s.Credit);
-            double universityElective = subjects.Where(s => IsType(s.Type, "대교", "대선", "교선")).Sum(s => s.Credit);
+            double universityElective = subjects.Where(s => IsType(s.Type, "대교", "대선", "교선", "대학교양")).Sum(s => s.Credit);
             double liberalTotal = liberalBasic + universityRequired + universityElective;
 
             double exploreRequired = subjects.Where(s => IsType(s.Type, "탐필", "전탐필")).Sum(s => s.Credit);
-            double exploreElective = subjects.Where(s => IsType(s.Type, "탐선", "전탐", "전탐선")).Sum(s => s.Credit);
+            double exploreElective = subjects.Where(s => IsType(s.Type, "탐선", "전탐", "전탐선", "전공탐색")).Sum(s => s.Credit);
             double exploreTotal = exploreRequired + exploreElective;
 
             double firstMajorRequired = subjects.Where(s => IsType(s.Type, "전필", "1전필", "제1전필")).Sum(s => s.Credit);
             double firstMajorElective = subjects.Where(s => IsType(s.Type, "전선", "1전선", "제1전선")).Sum(s => s.Credit);
             double firstMajorTotal = firstMajorRequired + firstMajorElective;
 
-            double secondMajorRequired = subjects.Where(s => IsType(s.Type, "복필", "2전필", "제2전필")).Sum(s => s.Credit);
-            double secondMajorElective = subjects.Where(s => IsType(s.Type, "복선", "2전선", "제2전선")).Sum(s => s.Credit);
+            // 💡 트랙전필, 트랙전선을 제2전공(심화) 쪽으로 합산하도록 추가!
+            double secondMajorRequired = subjects.Where(s => IsType(s.Type, "복필", "2전필", "제2전필", "트랙전필")).Sum(s => s.Credit);
+            double secondMajorElective = subjects.Where(s => IsType(s.Type, "복선", "2전선", "제2전선", "트랙전선")).Sum(s => s.Credit);
             double secondMajorTotal = secondMajorRequired + secondMajorElective;
-
             string secondBaseName = req.트랙존재여부 ? "트랙" : "제2전공";
 
             // 6. 데이터그리드뷰 업데이트
@@ -555,9 +577,12 @@ namespace WindowsFormsApp2
             return "부족 학점: " + string.Join(" / ", parts.ToArray());
         }
 
-        private bool IsType(string value, params string[] targets)
+        private bool IsType(string currentType, params string[] targets)
         {
-            return targets.Contains(value);
+            if (string.IsNullOrEmpty(currentType)) return false;
+
+            // currentType이 target 배열에 정확히 존재하거나 포함되는지 엄격하게 체크
+            return targets.Any(t => currentType == t || currentType.Contains(t));
         }
 
         private void AddStatusRowDisplayOnly(string area, double completed)
@@ -609,12 +634,12 @@ namespace WindowsFormsApp2
             }
         }
 
-        private string NormalizeSubjectKey(string text)
+        private string NormalizeSubjectKey(string name)
         {
-            if (string.IsNullOrWhiteSpace(text))
-                return "";
+            if (string.IsNullOrEmpty(name)) return "";
 
-            return Regex.Replace(text, @"[^가-힣A-Za-z0-9]", "").ToUpper();
+            // 💡 모든 공백, 하이픈(-)을 제거하고 소문자로 통일하여 비교 정확도 극대화
+            return name.Replace(" ", "").Replace("-", "").ToLower();
         }
         private void SetOverallCard(bool overall)
         {
@@ -647,6 +672,34 @@ namespace WindowsFormsApp2
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+        
+        private void dgvSubjects_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            // 1. 선택한 과목 데이터 가져오기
+            string oldType = dgvSubjects.Rows[e.RowIndex].Cells[0].Value.ToString();
+            string subjName = dgvSubjects.Rows[e.RowIndex].Cells[2].Value.ToString();
+
+            // 2. 팝업 창 띄우기 (직접 선택하게 함)
+            using (TypeChangeForm dlg = new TypeChangeForm(oldType))
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    string newType = dlg.SelectedType;
+
+                    // 3. 내부 데이터 리스트 업데이트
+                    var subject = subjects.FirstOrDefault(s => s.Name == subjName);
+                    if (subject != null)
+                    {
+                        subject.Type = newType;
+
+                        // 4. 즉시 재계산 및 UI 갱신
+                        CalculateAndRender();
+                    }
+                }
+            }
         }
     }
 }

@@ -61,6 +61,7 @@ namespace WindowsFormsApp2
             public int 교양기초 { get; set; }
             public int 전공탐색 { get; set; }
 
+
             // 💡 [추가] 누락되었던 4가지 요건 변수
             public int 대학교양필수 { get; set; }
             public int 대학교양선택 { get; set; }
@@ -75,8 +76,12 @@ namespace WindowsFormsApp2
             public bool 제2전공필수여부 { get; set; } = false;
             public bool 트랙존재여부 { get; set; } = false;
             public List<TrackInfo> 트랙목록 { get; set; } = new List<TrackInfo>();
-        }
+            public Dictionary<string, string> 코드매핑 { get; set; } = new Dictionary<string, string>();
 
+            // 💡 수동 추가용 리스트 (관리자 페이지에서 나중에 추가 가능하게)
+            public List<ManualMapping> 수동매핑리스트 { get; set; } = new List<ManualMapping>();
+        }
+        public class ManualMapping { public string 코드 { get; set; } public string 이수구분 { get; set; } }
         private void btnLoad_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -115,6 +120,7 @@ namespace WindowsFormsApp2
 
             public List<string> RequiredSubjects { get; set; } = new List<string>();
             public List<TrackInfo> Tracks { get; set; } = new List<TrackInfo>();
+            public Dictionary<string, string> SubjectMapping { get; set; } = new Dictionary<string, string>();
         }
 
         public class RequirementParser
@@ -179,15 +185,21 @@ namespace WindowsFormsApp2
                 // 2. 필수 과목 추출 로직 보강
 
 
-                Regex subjectRegex = new Regex(@"[A-Z]{3}\d{4}\s+(?:\d{4}\s+)?(?<SubjName>[가-힣a-zA-Z0-9\(\)Ⅰ-Ⅹ]+)", RegexOptions.Compiled);
-                // 트랙 이름 추출 정규식 (예: "① AI빅데이터 트랙" 에서 "AI빅데이터"만 쏙 빼냄)
+                Regex subjectRegex = new Regex(@"[A-Z]{3,4}\d{4,6}\s+(?:\d{4}\s+)?(?<SubjName>[가-힣a-zA-Z0-9\(\)Ⅰ-Ⅹ]+)", RegexOptions.Compiled);
                 Regex trackRegex = new Regex(@"([①-⑩]|\d+\.)\s*(?<TrackName>[가-힣a-zA-Z0-9]+)\s*트랙", RegexOptions.Compiled);
 
-                TrackInfo currentTrack = null; // 현재 파싱 중인 트랙
+                TrackInfo currentTrack = null;
+                string currentContext = ""; // 💡 현재 읽고 있는 줄이 무슨 영역인지 기억
 
                 foreach (string line in lines)
                 {
-                    // 1. 트랙 제목 줄인지 검사
+                    // 영역 키워드를 발견하면 컨텍스트 업데이트
+                    if (line.Contains("전공탐색") || line.Contains("전탐")) currentContext = "전공탐색";
+                    else if (line.Contains("전공필수") || line.Contains("전필")) currentContext = "전필";
+                    else if (line.Contains("전공선택") || line.Contains("전선")) currentContext = "전선";
+                    else if (line.Contains("교양기초")) currentContext = "교양기초";
+                    else if (line.Contains("대학교양")) currentContext = "대교";
+
                     Match trackMatch = trackRegex.Match(line);
                     if (trackMatch.Success)
                     {
@@ -196,25 +208,26 @@ namespace WindowsFormsApp2
                         continue;
                     }
 
-                    // 2. 모든 트랙 공통 필수 과목 (트랙 전필이라는 글자가 '없어야' 함)
-                    if ((line.Contains("전필") || line.Contains("필수")) && !line.Contains("트랙 전필") && !line.Contains("트랙전필"))
+                    // 과목을 발견하면 맵핑 사전에 등록!
+                    Match m = subjectRegex.Match(line);
+                    if (m.Success)
                     {
-                        Match m = subjectRegex.Match(line);
-                        if (m.Success)
+                        string subjName = m.Groups["SubjName"].Value.Trim();
+
+                        // 필수 과목 목록에도 일단 추가
+                        if ((line.Contains("전필") || line.Contains("필수")) && !line.Contains("트랙"))
                         {
-                            string subjName = m.Groups["SubjName"].Value.Trim();
                             if (!req.RequiredSubjects.Contains(subjName)) req.RequiredSubjects.Add(subjName);
                         }
-                    }
-
-                    // 3. 현재 트랙의 필수 과목 ("트랙 전필" 글자가 있는 경우)
-                    if (line.Contains("트랙 전필") || line.Contains("트랙전필"))
-                    {
-                        Match m = subjectRegex.Match(line);
-                        if (m.Success && currentTrack != null)
+                        if (line.Contains("트랙") && line.Contains("전필") && currentTrack != null)
                         {
-                            string subjName = m.Groups["SubjName"].Value.Trim();
                             if (!currentTrack.TrackRequiredSubjects.Contains(subjName)) currentTrack.TrackRequiredSubjects.Add(subjName);
+                        }
+
+                        // 💡 성적표 오작동 방지용 맵핑 저장 (예: "자바프로그래밍" -> "전공탐색")
+                        if (!string.IsNullOrEmpty(currentContext))
+                        {
+                            req.SubjectMapping[subjName] = currentContext;
                         }
                     }
                 }
@@ -298,8 +311,9 @@ namespace WindowsFormsApp2
                             // 💡 [복구 부분] 팝업 응답 결과 저장
                             제2전공필수여부 = (isDoubleMajor == DialogResult.Yes),
                             트랙존재여부 = (hasTrack == DialogResult.Yes),
-                            트랙목록 = parsedData.Tracks // 💡 파싱된 트랙 데이터 넘겨주기 추가!
-                        };
+                            트랙목록 = parsedData.Tracks,
+                            코드매핑 = parsedData.SubjectMapping
+                        }; 
                         // 5. 리스트에 추가하고 그리드 새로고침
                         requirements.Add(newReq);
                         RefreshGrid();
