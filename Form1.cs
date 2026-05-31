@@ -259,7 +259,7 @@ namespace WindowsFormsApp2
                 {
                     string type = match.Groups["Type"].Value;
                     string code = match.Groups["Code"].Value;
-                    string nameAndProf = match.Groups["NameAndProf"].Value.Trim();
+                    string cleanName = match.Groups["Name"].Value.Trim();
                     string creditText = match.Groups["Credit"].Value;
                     string grade = match.Groups["Grade"].Value;
 
@@ -270,8 +270,7 @@ namespace WindowsFormsApp2
                     if (grade == "F" || grade == "NP" || grade == "W")
                         continue;
 
-                    // 과목명과 교수명 분리 (첫 번째 공백 기준 앞부분만 사용)
-                    string cleanName = nameAndProf.Trim();
+                    
 
                     list.Add(new Subject
                     {
