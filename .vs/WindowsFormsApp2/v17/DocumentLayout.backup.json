@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|c:\\users\\castl\\onedrive\\\uBC14\uD0D5 \uD654\uBA74\\graduationmanager\\pdfreaderhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|C:\\Users\\castl\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\GraduationManager\\pdfreaderhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|solutionrelative:pdfreaderhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -15,11 +15,11 @@
       "RelativeMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|solutionrelative:analysisform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|c:\\users\\castl\\onedrive\\\uBC14\uD0D5 \uD654\uBA74\\graduationmanager\\typechangeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|C:\\Users\\castl\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\GraduationManager\\typechangeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|solutionrelative:typechangeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|c:\\users\\castl\\onedrive\\\uBC14\uD0D5 \uD654\uBA74\\graduationmanager\\typechangeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|C:\\Users\\castl\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\GraduationManager\\typechangeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79497D3F-1C36-410D-8B9B-4ECB8A0B1C77}|WindowsFormsApp2.csproj|solutionrelative:typechangeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -58,8 +58,7 @@
               "RelativeToolTip": "TypeChangeForm.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAewB8AAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-31T14:33:07.353Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-31T14:33:07.353Z"
             },
             {
               "$type": "Document",
@@ -71,8 +70,7 @@
               "RelativeToolTip": "PdfReaderHelper.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAACgAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-31T14:05:17.233Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-31T14:05:17.233Z"
             },
             {
               "$type": "Document",
@@ -84,8 +82,7 @@
               "RelativeToolTip": "AnalysisForm.cs",
               "ViewState": "AgIAANIBAAAAAAAAAAAgwPsCAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-31T06:46:28.847Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-31T06:46:28.847Z"
             },
             {
               "$type": "Document",
@@ -95,7 +92,7 @@
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\Users\\castl\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\GraduationManager\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAADgBAAAAAAAAAAAiwK8CAAA4AAAAAAAAAA==",
+              "ViewState": "AgIAADgBAAAAAAAAAAA4wGABAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-30T07:30:17.749Z",
               "EditorCaption": ""
@@ -110,8 +107,7 @@
               "RelativeToolTip": "AdminForm.cs",
               "ViewState": "AgIAAJgAAAAAAAAAAAAMwLYAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-13T16:43:46.219Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-13T16:43:46.219Z"
             },
             {
               "$type": "Document",
@@ -122,8 +118,7 @@
               "ToolTip": "C:\\Users\\castl\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\GraduationManager\\AdminForm.cs [\uB514\uC790\uC778]",
               "RelativeToolTip": "AdminForm.cs [\uB514\uC790\uC778]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-13T15:26:49.94Z",
-              "EditorCaption": " [\uB514\uC790\uC778]"
+              "WhenOpened": "2026-05-13T15:26:49.94Z"
             },
             {
               "$type": "Document",
@@ -134,8 +129,7 @@
               "ToolTip": "C:\\Users\\castl\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\GraduationManager\\Form1.cs [\uB514\uC790\uC778]",
               "RelativeToolTip": "Form1.cs [\uB514\uC790\uC778]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-30T07:30:07.141Z",
-              "EditorCaption": " [\uB514\uC790\uC778]"
+              "WhenOpened": "2026-04-30T07:30:07.141Z"
             },
             {
               "$type": "Document",
@@ -146,8 +140,7 @@
               "ToolTip": "C:\\Users\\castl\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\GraduationManager\\AnalysisForm.cs [\uB514\uC790\uC778]",
               "RelativeToolTip": "AnalysisForm.cs [\uB514\uC790\uC778]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-31T06:46:23.936Z",
-              "EditorCaption": " [\uB514\uC790\uC778]"
+              "WhenOpened": "2026-05-31T06:46:23.936Z"
             },
             {
               "$type": "Document",
@@ -158,8 +151,7 @@
               "ToolTip": "C:\\Users\\castl\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\GraduationManager\\TypeChangeForm.cs [\uB514\uC790\uC778]",
               "RelativeToolTip": "TypeChangeForm.cs [\uB514\uC790\uC778]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-31T14:31:04.64Z",
-              "EditorCaption": " [\uB514\uC790\uC778]"
+              "WhenOpened": "2026-05-31T14:31:04.64Z"
             }
           ]
         }
