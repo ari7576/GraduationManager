@@ -67,6 +67,10 @@ namespace WindowsFormsApp2
             public int 전공탐색필수 { get; set; }
             public int 전공탐색선택 { get; set; }
 
+            public int 교양소계 { get; set; }
+            public int 제2전공필수 { get; set; }
+            public int 제2전공선택 { get; set; }
+
             public List<string> 필수과목목록 { get; set; } = new List<string>();
             public bool 제2전공필수여부 { get; set; } = false;
             public bool 트랙존재여부 { get; set; } = false;
@@ -105,6 +109,9 @@ namespace WindowsFormsApp2
             public int UnivElective { get; set; }
             public int ExploreRequired { get; set; }
             public int ExploreElective { get; set; }
+            public int GenTotal { get; set; }
+            public int SecondMajorReq { get; set; }
+            public int SecondMajorElec { get; set; }
 
             public List<string> RequiredSubjects { get; set; } = new List<string>();
             public List<TrackInfo> Tracks { get; set; } = new List<TrackInfo>();
@@ -116,30 +123,61 @@ namespace WindowsFormsApp2
             {
                 Requirement req = new Requirement();
 
-                // 1. 학점 요건 숫자 파싱 (기존과 동일, 정상 작동 확인됨)
-                string creditPattern =
-                    @"(?<Type>[가-힣]{2})\s+" +
-                    @"(?<GenReq>\d+)\s+" +
-                    @"\d+\s+\d+\s+\d+\s+" +
-                    @"(?<ExploreReq>\d+)\s+" +
-                    @"\d+\s+\d+\s+\d+\s+" +
-                    @"(?<MajorReq>\d+)\s+" +
-                    @"(?<MajorElec>\d+)\s+" +
-                    @"\d+\s+" +
-                    @"(?<Total>\d+)";
+                // 1. 학점 요건 숫자 파싱 (기존과 동일, 정상 작동 확인됨)          
 
-                Match creditMatch = Regex.Match(rawText, creditPattern);
-                if (creditMatch.Success)
+                string[] lines = rawText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                bool mainParsed = false; // 메인 전공을 찾았는지 여부
+
+                foreach (string line in lines)
                 {
-                    req.GeneralRequired = int.Parse(creditMatch.Groups["GenReq"].Value);
-                    req.MajorExploration = int.Parse(creditMatch.Groups["ExploreReq"].Value);
-                    req.MajorRequired = int.Parse(creditMatch.Groups["MajorReq"].Value);
-                    req.MajorElective = int.Parse(creditMatch.Groups["MajorElec"].Value);
-                    req.TotalCredit = int.Parse(creditMatch.Groups["Total"].Value);
+                    MatchCollection numMatches = Regex.Matches(line, @"\d+");
+                    List<int> nums = new List<int>();
+                    foreach (Match m in numMatches) nums.Add(int.Parse(m.Value));
+
+                    // 메인 전공 줄 파싱 (숫자가 11~12개)
+                    if (!mainParsed && nums.Count >= 11)
+                    {
+                        req.TotalCredit = nums[nums.Count - 1];
+                        req.MajorElective = nums[nums.Count - 3];
+                        req.MajorRequired = nums[nums.Count - 4];
+                        req.MajorExploration = nums[nums.Count - 6];
+                        req.GeneralRequired = nums[0];
+                        req.UnivRequired = nums[1];
+                        req.UnivElective = nums[2];
+
+                        // 💡 교양소계 캐치!
+                        req.GenTotal = nums[3];
+
+                        if (nums.Count == 11)
+                        {
+                            req.ExploreRequired = 0;
+                            req.ExploreElective = req.MajorExploration;
+                        }
+                        else
+                        {
+                            req.ExploreRequired = nums[4];
+                            req.ExploreElective = nums[5];
+                        }
+                        mainParsed = true;
+                    }
+                    // 💡 메인 전공 바로 밑에 있는 "심화" 줄 파싱 (제2전공)
+                    else if (mainParsed && line.Contains("심화") && nums.Count >= 3)
+                    {
+                        // 심화 줄은 숫자가 적으므로 뒤에서부터 가져옵니다.
+                        req.SecondMajorElec = nums[nums.Count - 3]; // 전선
+
+                        // 전필은 공백 처리되어 생략될 수도 있으므로 방어적 처리
+                        if (nums.Count >= 4)
+                            req.SecondMajorReq = nums[nums.Count - 4];
+                        else
+                            req.SecondMajorReq = 0;
+
+                        break; // 심화까지 찾았으면 파싱 완전 종료!
+                    }
                 }
 
                 // 2. 필수 과목 추출 로직 보강
-                string[] lines = rawText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
 
                 Regex subjectRegex = new Regex(@"[A-Z]{3}\d{4}\s+(?:\d{4}\s+)?(?<SubjName>[가-힣a-zA-Z0-9\(\)Ⅰ-Ⅹ]+)", RegexOptions.Compiled);
                 // 트랙 이름 추출 정규식 (예: "① AI빅데이터 트랙" 에서 "AI빅데이터"만 쏙 빼냄)
@@ -253,6 +291,9 @@ namespace WindowsFormsApp2
                             전공탐색필수 = parsedData.ExploreRequired,
                             전공탐색선택 = parsedData.ExploreElective,
                             필수과목목록 = parsedData.RequiredSubjects,
+                            교양소계 = parsedData.GenTotal,
+                            제2전공필수 = parsedData.SecondMajorReq,
+                            제2전공선택 = parsedData.SecondMajorElec,
 
                             // 💡 [복구 부분] 팝업 응답 결과 저장
                             제2전공필수여부 = (isDoubleMajor == DialogResult.Yes),
