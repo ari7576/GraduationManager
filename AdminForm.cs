@@ -56,15 +56,21 @@ namespace WindowsFormsApp2
             public int 입학년도 { get; set; }
             public int 총학점기준 { get; set; }
 
-            // 파싱된 세부 데이터를 저장할 속성들 추가
             public int 전공필수 { get; set; }
             public int 전공선택 { get; set; }
             public int 교양기초 { get; set; }
             public int 전공탐색 { get; set; }
+
+            // 💡 [추가] 누락되었던 4가지 요건 변수
+            public int 대학교양필수 { get; set; }
+            public int 대학교양선택 { get; set; }
+            public int 전공탐색필수 { get; set; }
+            public int 전공탐색선택 { get; set; }
+
             public List<string> 필수과목목록 { get; set; } = new List<string>();
             public bool 제2전공필수여부 { get; set; } = false;
             public bool 트랙존재여부 { get; set; } = false;
-            public List<TrackInfo> 트랙목록 { get; set; } = new List<TrackInfo>(); // 💡 추가!
+            public List<TrackInfo> 트랙목록 { get; set; } = new List<TrackInfo>();
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -92,9 +98,16 @@ namespace WindowsFormsApp2
             public int MajorElective { get; set; }
             public int GeneralRequired { get; set; }
             public int GeneralElective { get; set; }
-            public int MajorExploration { get; set; } // 전공탐색 (추가됨)
+            public int MajorExploration { get; set; }
+
+            // 💡 [추가] 파서 임시 저장용 변수
+            public int UnivRequired { get; set; }
+            public int UnivElective { get; set; }
+            public int ExploreRequired { get; set; }
+            public int ExploreElective { get; set; }
+
             public List<string> RequiredSubjects { get; set; } = new List<string>();
-            public List<TrackInfo> Tracks { get; set; } = new List<TrackInfo>(); // 💡 추가!
+            public List<TrackInfo> Tracks { get; set; } = new List<TrackInfo>();
         }
 
         public class RequirementParser
@@ -235,6 +248,10 @@ namespace WindowsFormsApp2
                             전공선택 = parsedData.MajorElective,
                             교양기초 = parsedData.GeneralRequired,
                             전공탐색 = parsedData.MajorExploration,
+                            대학교양필수 = parsedData.UnivRequired,
+                            대학교양선택 = parsedData.UnivElective,
+                            전공탐색필수 = parsedData.ExploreRequired,
+                            전공탐색선택 = parsedData.ExploreElective,
                             필수과목목록 = parsedData.RequiredSubjects,
 
                             // 💡 [복구 부분] 팝업 응답 결과 저장

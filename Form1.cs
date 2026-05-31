@@ -424,12 +424,12 @@ namespace WindowsFormsApp2
             AddStatusRow("총 이수학점", req.총학점기준, total);
 
             AddStatusRow("교양기초", req.교양기초, liberalBasic);
-            AddStatusRowDisplayOnly("대학교양 필수", universityRequired);
-            AddStatusRowDisplayOnly("대학교양 선택", universityElective);
+            AddStatusRow("대학교양 필수", req.대학교양필수, universityRequired);
+            AddStatusRow("대학교양 선택", req.대학교양선택, universityElective);
             AddStatusRowDisplayOnly("교양 소계", liberalTotal);
 
-            AddStatusRowDisplayOnly("전공탐색 필수", exploreRequired);
-            AddStatusRowDisplayOnly("전공탐색 선택", exploreElective);
+            AddStatusRow("전공탐색 필수", req.전공탐색필수, exploreRequired);
+            AddStatusRow("전공탐색 선택", req.전공탐색선택, exploreElective);
             AddStatusRow("전공탐색 소계", req.전공탐색, exploreTotal);
 
             AddStatusRow("제1전공 필수", req.전공필수, firstMajorRequired);
@@ -463,12 +463,11 @@ namespace WindowsFormsApp2
             SetCard("total", total, req.총학점기준);
 
             SetCard("liberalBasic", liberalBasic, req.교양기초);
-            SetCardDisplayOnly("univReq", universityRequired);
-            SetCardDisplayOnly("univElec", universityElective);
+            SetCard("univReq", universityRequired, req.대학교양필수);
+            SetCard("univElec", universityElective, req.대학교양선택);
             SetCardDisplayOnly("liberalTotal", liberalTotal);
-
-            SetCardDisplayOnly("exploreReq", exploreRequired);
-            SetCardDisplayOnly("exploreElec", exploreElective);
+            SetCard("exploreReq", exploreRequired, req.전공탐색필수);
+            SetCard("exploreElec", exploreElective, req.전공탐색선택);
             SetCard("exploreTotal", exploreTotal, req.전공탐색);
 
             SetCard("firstMajorReq", firstMajorRequired, req.전공필수);
