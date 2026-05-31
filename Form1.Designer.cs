@@ -52,26 +52,11 @@
             this.lblUnivReqStatus = new System.Windows.Forms.Label();
             this.lblUnivReqValue = new System.Windows.Forms.Label();
             this.lblUnivReqTitle = new System.Windows.Forms.Label();
-            this.pnlUnivElec = new System.Windows.Forms.Panel();
-            this.prgUnivElec = new System.Windows.Forms.ProgressBar();
-            this.lblUnivElecStatus = new System.Windows.Forms.Label();
-            this.lblUnivElecValue = new System.Windows.Forms.Label();
-            this.lblUnivElecTitle = new System.Windows.Forms.Label();
             this.pnlLiberalTotal = new System.Windows.Forms.Panel();
             this.prgLiberalTotal = new System.Windows.Forms.ProgressBar();
             this.lblLiberalTotalStatus = new System.Windows.Forms.Label();
             this.lblLiberalTotalValue = new System.Windows.Forms.Label();
             this.lblLiberalTotalTitle = new System.Windows.Forms.Label();
-            this.pnlExploreReq = new System.Windows.Forms.Panel();
-            this.prgExploreReq = new System.Windows.Forms.ProgressBar();
-            this.lblExploreReqStatus = new System.Windows.Forms.Label();
-            this.lblExploreReqValue = new System.Windows.Forms.Label();
-            this.lblExploreReqTitle = new System.Windows.Forms.Label();
-            this.pnlExploreElec = new System.Windows.Forms.Panel();
-            this.prgExploreElec = new System.Windows.Forms.ProgressBar();
-            this.lblExploreElecStatus = new System.Windows.Forms.Label();
-            this.lblExploreElecValue = new System.Windows.Forms.Label();
-            this.lblExploreElecTitle = new System.Windows.Forms.Label();
             this.pnlExploreTotal = new System.Windows.Forms.Panel();
             this.prgExploreTotal = new System.Windows.Forms.ProgressBar();
             this.lblExploreTotalStatus = new System.Windows.Forms.Label();
@@ -142,10 +127,7 @@
             this.pnlTotal.SuspendLayout();
             this.pnlLiberalBasic.SuspendLayout();
             this.pnlUnivReq.SuspendLayout();
-            this.pnlUnivElec.SuspendLayout();
             this.pnlLiberalTotal.SuspendLayout();
-            this.pnlExploreReq.SuspendLayout();
-            this.pnlExploreElec.SuspendLayout();
             this.pnlExploreTotal.SuspendLayout();
             this.pnlFirstMajorReq.SuspendLayout();
             this.pnlFirstMajorElec.SuspendLayout();
@@ -345,10 +327,7 @@
             this.summaryBox.Controls.Add(this.pnlTotal);
             this.summaryBox.Controls.Add(this.pnlLiberalBasic);
             this.summaryBox.Controls.Add(this.pnlUnivReq);
-            this.summaryBox.Controls.Add(this.pnlUnivElec);
             this.summaryBox.Controls.Add(this.pnlLiberalTotal);
-            this.summaryBox.Controls.Add(this.pnlExploreReq);
-            this.summaryBox.Controls.Add(this.pnlExploreElec);
             this.summaryBox.Controls.Add(this.pnlExploreTotal);
             this.summaryBox.Controls.Add(this.pnlFirstMajorReq);
             this.summaryBox.Controls.Add(this.pnlFirstMajorElec);
@@ -525,59 +504,6 @@
             this.lblUnivReqTitle.Text = "대학교양 필수";
             this.lblUnivReqTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // pnlUnivElec
-            // 
-            this.pnlUnivElec.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.pnlUnivElec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlUnivElec.Controls.Add(this.prgUnivElec);
-            this.pnlUnivElec.Controls.Add(this.lblUnivElecStatus);
-            this.pnlUnivElec.Controls.Add(this.lblUnivElecValue);
-            this.pnlUnivElec.Controls.Add(this.lblUnivElecTitle);
-            this.pnlUnivElec.Location = new System.Drawing.Point(398, 38);
-            this.pnlUnivElec.Name = "pnlUnivElec";
-            this.pnlUnivElec.Size = new System.Drawing.Size(116, 74);
-            this.pnlUnivElec.TabIndex = 0;
-            // 
-            // prgUnivElec
-            // 
-            this.prgUnivElec.Location = new System.Drawing.Point(10, 62);
-            this.prgUnivElec.Name = "prgUnivElec";
-            this.prgUnivElec.Size = new System.Drawing.Size(96, 8);
-            this.prgUnivElec.TabIndex = 3;
-            // 
-            // lblUnivElecStatus
-            // 
-            this.lblUnivElecStatus.Font = new System.Drawing.Font("맑은 고딕", 7.5F, System.Drawing.FontStyle.Bold);
-            this.lblUnivElecStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(57)))), ((int)(((byte)(53)))));
-            this.lblUnivElecStatus.Location = new System.Drawing.Point(0, 43);
-            this.lblUnivElecStatus.Name = "lblUnivElecStatus";
-            this.lblUnivElecStatus.Size = new System.Drawing.Size(116, 18);
-            this.lblUnivElecStatus.TabIndex = 2;
-            this.lblUnivElecStatus.Text = "대기";
-            this.lblUnivElecStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblUnivElecValue
-            // 
-            this.lblUnivElecValue.Font = new System.Drawing.Font("맑은 고딕", 10F, System.Drawing.FontStyle.Bold);
-            this.lblUnivElecValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(42)))), ((int)(((byte)(76)))));
-            this.lblUnivElecValue.Location = new System.Drawing.Point(0, 23);
-            this.lblUnivElecValue.Name = "lblUnivElecValue";
-            this.lblUnivElecValue.Size = new System.Drawing.Size(116, 21);
-            this.lblUnivElecValue.TabIndex = 1;
-            this.lblUnivElecValue.Text = "0 / 0";
-            this.lblUnivElecValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblUnivElecTitle
-            // 
-            this.lblUnivElecTitle.Font = new System.Drawing.Font("맑은 고딕", 7.8F, System.Drawing.FontStyle.Bold);
-            this.lblUnivElecTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(101)))), ((int)(((byte)(201)))));
-            this.lblUnivElecTitle.Location = new System.Drawing.Point(0, 5);
-            this.lblUnivElecTitle.Name = "lblUnivElecTitle";
-            this.lblUnivElecTitle.Size = new System.Drawing.Size(116, 18);
-            this.lblUnivElecTitle.TabIndex = 0;
-            this.lblUnivElecTitle.Text = "대학교양 선택";
-            this.lblUnivElecTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // pnlLiberalTotal
             // 
             this.pnlLiberalTotal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -586,7 +512,7 @@
             this.pnlLiberalTotal.Controls.Add(this.lblLiberalTotalStatus);
             this.pnlLiberalTotal.Controls.Add(this.lblLiberalTotalValue);
             this.pnlLiberalTotal.Controls.Add(this.lblLiberalTotalTitle);
-            this.pnlLiberalTotal.Location = new System.Drawing.Point(524, 38);
+            this.pnlLiberalTotal.Location = new System.Drawing.Point(398, 38);
             this.pnlLiberalTotal.Name = "pnlLiberalTotal";
             this.pnlLiberalTotal.Size = new System.Drawing.Size(116, 74);
             this.pnlLiberalTotal.TabIndex = 0;
@@ -613,7 +539,7 @@
             // 
             this.lblLiberalTotalValue.Font = new System.Drawing.Font("맑은 고딕", 10F, System.Drawing.FontStyle.Bold);
             this.lblLiberalTotalValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(42)))), ((int)(((byte)(76)))));
-            this.lblLiberalTotalValue.Location = new System.Drawing.Point(0, 23);
+            this.lblLiberalTotalValue.Location = new System.Drawing.Point(-2, 22);
             this.lblLiberalTotalValue.Name = "lblLiberalTotalValue";
             this.lblLiberalTotalValue.Size = new System.Drawing.Size(116, 21);
             this.lblLiberalTotalValue.TabIndex = 1;
@@ -631,112 +557,6 @@
             this.lblLiberalTotalTitle.Text = "교양 소계";
             this.lblLiberalTotalTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // pnlExploreReq
-            // 
-            this.pnlExploreReq.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.pnlExploreReq.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlExploreReq.Controls.Add(this.prgExploreReq);
-            this.pnlExploreReq.Controls.Add(this.lblExploreReqStatus);
-            this.pnlExploreReq.Controls.Add(this.lblExploreReqValue);
-            this.pnlExploreReq.Controls.Add(this.lblExploreReqTitle);
-            this.pnlExploreReq.Location = new System.Drawing.Point(20, 120);
-            this.pnlExploreReq.Name = "pnlExploreReq";
-            this.pnlExploreReq.Size = new System.Drawing.Size(116, 74);
-            this.pnlExploreReq.TabIndex = 0;
-            // 
-            // prgExploreReq
-            // 
-            this.prgExploreReq.Location = new System.Drawing.Point(10, 62);
-            this.prgExploreReq.Name = "prgExploreReq";
-            this.prgExploreReq.Size = new System.Drawing.Size(96, 8);
-            this.prgExploreReq.TabIndex = 3;
-            // 
-            // lblExploreReqStatus
-            // 
-            this.lblExploreReqStatus.Font = new System.Drawing.Font("맑은 고딕", 7.5F, System.Drawing.FontStyle.Bold);
-            this.lblExploreReqStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(57)))), ((int)(((byte)(53)))));
-            this.lblExploreReqStatus.Location = new System.Drawing.Point(0, 43);
-            this.lblExploreReqStatus.Name = "lblExploreReqStatus";
-            this.lblExploreReqStatus.Size = new System.Drawing.Size(116, 18);
-            this.lblExploreReqStatus.TabIndex = 2;
-            this.lblExploreReqStatus.Text = "대기";
-            this.lblExploreReqStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblExploreReqValue
-            // 
-            this.lblExploreReqValue.Font = new System.Drawing.Font("맑은 고딕", 10F, System.Drawing.FontStyle.Bold);
-            this.lblExploreReqValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(42)))), ((int)(((byte)(76)))));
-            this.lblExploreReqValue.Location = new System.Drawing.Point(0, 23);
-            this.lblExploreReqValue.Name = "lblExploreReqValue";
-            this.lblExploreReqValue.Size = new System.Drawing.Size(116, 21);
-            this.lblExploreReqValue.TabIndex = 1;
-            this.lblExploreReqValue.Text = "0 / 0";
-            this.lblExploreReqValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblExploreReqTitle
-            // 
-            this.lblExploreReqTitle.Font = new System.Drawing.Font("맑은 고딕", 7.8F, System.Drawing.FontStyle.Bold);
-            this.lblExploreReqTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(101)))), ((int)(((byte)(201)))));
-            this.lblExploreReqTitle.Location = new System.Drawing.Point(0, 5);
-            this.lblExploreReqTitle.Name = "lblExploreReqTitle";
-            this.lblExploreReqTitle.Size = new System.Drawing.Size(116, 18);
-            this.lblExploreReqTitle.TabIndex = 0;
-            this.lblExploreReqTitle.Text = "전공탐색 필수";
-            this.lblExploreReqTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pnlExploreElec
-            // 
-            this.pnlExploreElec.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.pnlExploreElec.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlExploreElec.Controls.Add(this.prgExploreElec);
-            this.pnlExploreElec.Controls.Add(this.lblExploreElecStatus);
-            this.pnlExploreElec.Controls.Add(this.lblExploreElecValue);
-            this.pnlExploreElec.Controls.Add(this.lblExploreElecTitle);
-            this.pnlExploreElec.Location = new System.Drawing.Point(146, 120);
-            this.pnlExploreElec.Name = "pnlExploreElec";
-            this.pnlExploreElec.Size = new System.Drawing.Size(116, 74);
-            this.pnlExploreElec.TabIndex = 0;
-            // 
-            // prgExploreElec
-            // 
-            this.prgExploreElec.Location = new System.Drawing.Point(10, 62);
-            this.prgExploreElec.Name = "prgExploreElec";
-            this.prgExploreElec.Size = new System.Drawing.Size(96, 8);
-            this.prgExploreElec.TabIndex = 3;
-            // 
-            // lblExploreElecStatus
-            // 
-            this.lblExploreElecStatus.Font = new System.Drawing.Font("맑은 고딕", 7.5F, System.Drawing.FontStyle.Bold);
-            this.lblExploreElecStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(57)))), ((int)(((byte)(53)))));
-            this.lblExploreElecStatus.Location = new System.Drawing.Point(0, 43);
-            this.lblExploreElecStatus.Name = "lblExploreElecStatus";
-            this.lblExploreElecStatus.Size = new System.Drawing.Size(116, 18);
-            this.lblExploreElecStatus.TabIndex = 2;
-            this.lblExploreElecStatus.Text = "대기";
-            this.lblExploreElecStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblExploreElecValue
-            // 
-            this.lblExploreElecValue.Font = new System.Drawing.Font("맑은 고딕", 10F, System.Drawing.FontStyle.Bold);
-            this.lblExploreElecValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(42)))), ((int)(((byte)(76)))));
-            this.lblExploreElecValue.Location = new System.Drawing.Point(0, 23);
-            this.lblExploreElecValue.Name = "lblExploreElecValue";
-            this.lblExploreElecValue.Size = new System.Drawing.Size(116, 21);
-            this.lblExploreElecValue.TabIndex = 1;
-            this.lblExploreElecValue.Text = "0 / 0";
-            this.lblExploreElecValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblExploreElecTitle
-            // 
-            this.lblExploreElecTitle.Font = new System.Drawing.Font("맑은 고딕", 7.8F, System.Drawing.FontStyle.Bold);
-            this.lblExploreElecTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(101)))), ((int)(((byte)(201)))));
-            this.lblExploreElecTitle.Location = new System.Drawing.Point(0, 5);
-            this.lblExploreElecTitle.Name = "lblExploreElecTitle";
-            this.lblExploreElecTitle.Size = new System.Drawing.Size(116, 18);
-            this.lblExploreElecTitle.TabIndex = 0;
-            this.lblExploreElecTitle.Text = "전공탐색 선택";
-            this.lblExploreElecTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // pnlExploreTotal
             // 
             this.pnlExploreTotal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -745,7 +565,7 @@
             this.pnlExploreTotal.Controls.Add(this.lblExploreTotalStatus);
             this.pnlExploreTotal.Controls.Add(this.lblExploreTotalValue);
             this.pnlExploreTotal.Controls.Add(this.lblExploreTotalTitle);
-            this.pnlExploreTotal.Location = new System.Drawing.Point(272, 120);
+            this.pnlExploreTotal.Location = new System.Drawing.Point(525, 38);
             this.pnlExploreTotal.Name = "pnlExploreTotal";
             this.pnlExploreTotal.Size = new System.Drawing.Size(116, 74);
             this.pnlExploreTotal.TabIndex = 0;
@@ -798,7 +618,7 @@
             this.pnlFirstMajorReq.Controls.Add(this.lblFirstMajorReqStatus);
             this.pnlFirstMajorReq.Controls.Add(this.lblFirstMajorReqValue);
             this.pnlFirstMajorReq.Controls.Add(this.lblFirstMajorReqTitle);
-            this.pnlFirstMajorReq.Location = new System.Drawing.Point(398, 120);
+            this.pnlFirstMajorReq.Location = new System.Drawing.Point(20, 118);
             this.pnlFirstMajorReq.Name = "pnlFirstMajorReq";
             this.pnlFirstMajorReq.Size = new System.Drawing.Size(116, 74);
             this.pnlFirstMajorReq.TabIndex = 0;
@@ -851,7 +671,7 @@
             this.pnlFirstMajorElec.Controls.Add(this.lblFirstMajorElecStatus);
             this.pnlFirstMajorElec.Controls.Add(this.lblFirstMajorElecValue);
             this.pnlFirstMajorElec.Controls.Add(this.lblFirstMajorElecTitle);
-            this.pnlFirstMajorElec.Location = new System.Drawing.Point(524, 120);
+            this.pnlFirstMajorElec.Location = new System.Drawing.Point(146, 118);
             this.pnlFirstMajorElec.Name = "pnlFirstMajorElec";
             this.pnlFirstMajorElec.Size = new System.Drawing.Size(116, 74);
             this.pnlFirstMajorElec.TabIndex = 0;
@@ -904,7 +724,7 @@
             this.pnlFirstMajorTotal.Controls.Add(this.lblFirstMajorTotalStatus);
             this.pnlFirstMajorTotal.Controls.Add(this.lblFirstMajorTotalValue);
             this.pnlFirstMajorTotal.Controls.Add(this.lblFirstMajorTotalTitle);
-            this.pnlFirstMajorTotal.Location = new System.Drawing.Point(20, 202);
+            this.pnlFirstMajorTotal.Location = new System.Drawing.Point(272, 118);
             this.pnlFirstMajorTotal.Name = "pnlFirstMajorTotal";
             this.pnlFirstMajorTotal.Size = new System.Drawing.Size(116, 74);
             this.pnlFirstMajorTotal.TabIndex = 0;
@@ -957,7 +777,7 @@
             this.pnlSecondMajorReq.Controls.Add(this.lblSecondMajorReqStatus);
             this.pnlSecondMajorReq.Controls.Add(this.lblSecondMajorReqValue);
             this.pnlSecondMajorReq.Controls.Add(this.lblSecondMajorReqTitle);
-            this.pnlSecondMajorReq.Location = new System.Drawing.Point(146, 202);
+            this.pnlSecondMajorReq.Location = new System.Drawing.Point(20, 199);
             this.pnlSecondMajorReq.Name = "pnlSecondMajorReq";
             this.pnlSecondMajorReq.Size = new System.Drawing.Size(116, 74);
             this.pnlSecondMajorReq.TabIndex = 0;
@@ -1010,7 +830,7 @@
             this.pnlSecondMajorElec.Controls.Add(this.lblSecondMajorElecStatus);
             this.pnlSecondMajorElec.Controls.Add(this.lblSecondMajorElecValue);
             this.pnlSecondMajorElec.Controls.Add(this.lblSecondMajorElecTitle);
-            this.pnlSecondMajorElec.Location = new System.Drawing.Point(272, 202);
+            this.pnlSecondMajorElec.Location = new System.Drawing.Point(146, 199);
             this.pnlSecondMajorElec.Name = "pnlSecondMajorElec";
             this.pnlSecondMajorElec.Size = new System.Drawing.Size(116, 74);
             this.pnlSecondMajorElec.TabIndex = 0;
@@ -1063,7 +883,7 @@
             this.pnlSecondMajorTotal.Controls.Add(this.lblSecondMajorTotalStatus);
             this.pnlSecondMajorTotal.Controls.Add(this.lblSecondMajorTotalValue);
             this.pnlSecondMajorTotal.Controls.Add(this.lblSecondMajorTotalTitle);
-            this.pnlSecondMajorTotal.Location = new System.Drawing.Point(398, 202);
+            this.pnlSecondMajorTotal.Location = new System.Drawing.Point(272, 199);
             this.pnlSecondMajorTotal.Name = "pnlSecondMajorTotal";
             this.pnlSecondMajorTotal.Size = new System.Drawing.Size(116, 74);
             this.pnlSecondMajorTotal.TabIndex = 0;
@@ -1116,7 +936,7 @@
             this.pnlOverall.Controls.Add(this.lblOverallStatus);
             this.pnlOverall.Controls.Add(this.lblOverallValue);
             this.pnlOverall.Controls.Add(this.lblOverallTitle);
-            this.pnlOverall.Location = new System.Drawing.Point(524, 202);
+            this.pnlOverall.Location = new System.Drawing.Point(398, 199);
             this.pnlOverall.Name = "pnlOverall";
             this.pnlOverall.Size = new System.Drawing.Size(116, 74);
             this.pnlOverall.TabIndex = 0;
@@ -1420,10 +1240,7 @@
             this.pnlTotal.ResumeLayout(false);
             this.pnlLiberalBasic.ResumeLayout(false);
             this.pnlUnivReq.ResumeLayout(false);
-            this.pnlUnivElec.ResumeLayout(false);
             this.pnlLiberalTotal.ResumeLayout(false);
-            this.pnlExploreReq.ResumeLayout(false);
-            this.pnlExploreElec.ResumeLayout(false);
             this.pnlExploreTotal.ResumeLayout(false);
             this.pnlFirstMajorReq.ResumeLayout(false);
             this.pnlFirstMajorElec.ResumeLayout(false);
@@ -1473,26 +1290,11 @@
         private System.Windows.Forms.Label lblUnivReqValue;
         private System.Windows.Forms.Label lblUnivReqStatus;
         private System.Windows.Forms.ProgressBar prgUnivReq;
-        private System.Windows.Forms.Panel pnlUnivElec;
-        private System.Windows.Forms.Label lblUnivElecTitle;
-        private System.Windows.Forms.Label lblUnivElecValue;
-        private System.Windows.Forms.Label lblUnivElecStatus;
-        private System.Windows.Forms.ProgressBar prgUnivElec;
         private System.Windows.Forms.Panel pnlLiberalTotal;
         private System.Windows.Forms.Label lblLiberalTotalTitle;
         private System.Windows.Forms.Label lblLiberalTotalValue;
         private System.Windows.Forms.Label lblLiberalTotalStatus;
         private System.Windows.Forms.ProgressBar prgLiberalTotal;
-        private System.Windows.Forms.Panel pnlExploreReq;
-        private System.Windows.Forms.Label lblExploreReqTitle;
-        private System.Windows.Forms.Label lblExploreReqValue;
-        private System.Windows.Forms.Label lblExploreReqStatus;
-        private System.Windows.Forms.ProgressBar prgExploreReq;
-        private System.Windows.Forms.Panel pnlExploreElec;
-        private System.Windows.Forms.Label lblExploreElecTitle;
-        private System.Windows.Forms.Label lblExploreElecValue;
-        private System.Windows.Forms.Label lblExploreElecStatus;
-        private System.Windows.Forms.ProgressBar prgExploreElec;
         private System.Windows.Forms.Panel pnlExploreTotal;
         private System.Windows.Forms.Label lblExploreTotalTitle;
         private System.Windows.Forms.Label lblExploreTotalValue;

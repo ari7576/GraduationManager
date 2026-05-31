@@ -78,11 +78,10 @@ namespace WindowsFormsApp2
 
             cards["liberalBasic"] = new SummaryCard { Panel = pnlLiberalBasic, Title = lblLiberalBasicTitle, Value = lblLiberalBasicValue, Status = lblLiberalBasicStatus, Progress = prgLiberalBasic };
             cards["univReq"] = new SummaryCard { Panel = pnlUnivReq, Title = lblUnivReqTitle, Value = lblUnivReqValue, Status = lblUnivReqStatus, Progress = prgUnivReq };
-            cards["univElec"] = new SummaryCard { Panel = pnlUnivElec, Title = lblUnivElecTitle, Value = lblUnivElecValue, Status = lblUnivElecStatus, Progress = prgUnivElec };
+       
             cards["liberalTotal"] = new SummaryCard { Panel = pnlLiberalTotal, Title = lblLiberalTotalTitle, Value = lblLiberalTotalValue, Status = lblLiberalTotalStatus, Progress = prgLiberalTotal };
 
-            cards["exploreReq"] = new SummaryCard { Panel = pnlExploreReq, Title = lblExploreReqTitle, Value = lblExploreReqValue, Status = lblExploreReqStatus, Progress = prgExploreReq };
-            cards["exploreElec"] = new SummaryCard { Panel = pnlExploreElec, Title = lblExploreElecTitle, Value = lblExploreElecValue, Status = lblExploreElecStatus, Progress = prgExploreElec };
+            
             cards["exploreTotal"] = new SummaryCard { Panel = pnlExploreTotal, Title = lblExploreTotalTitle, Value = lblExploreTotalValue, Status = lblExploreTotalStatus, Progress = prgExploreTotal };
 
             cards["firstMajorReq"] = new SummaryCard { Panel = pnlFirstMajorReq, Title = lblFirstMajorReqTitle, Value = lblFirstMajorReqValue, Status = lblFirstMajorReqStatus, Progress = prgFirstMajorReq };
@@ -107,6 +106,13 @@ namespace WindowsFormsApp2
 
         private void btnAdmin_Click(object sender, EventArgs e)
         {
+            string password = Microsoft.VisualBasic.Interaction.InputBox("관리자 비밀번호를 입력하세요", "관리자 인증", "");
+            if (password != "1234") // 원하는 비밀번호로 변경
+            {
+                MessageBox.Show("비밀번호가 틀렸습니다.");
+                return;
+            }
+
             using (AdminForm adminForm = new AdminForm())
             {
                 adminForm.ShowDialog(this);
@@ -182,6 +188,7 @@ namespace WindowsFormsApp2
                     }
 
                     originalTranscriptText = text;
+                    
                     txtRawInput.Text = FormatTranscriptText(text);
 
                     MessageBox.Show("성적표를 불러왔습니다.\n계산하기 버튼을 눌러주세요.");
@@ -240,17 +247,17 @@ namespace WindowsFormsApp2
             if (string.IsNullOrWhiteSpace(text))
                 return list;
 
-            // 💡 1. 텍스트를 하나로 뭉치지 않고, 안전하게 '줄 단위'로 쪼갭니다.
-            string raw = text.Replace("\r", "").Replace("\t", " ");
+           
+            string raw = text.Replace("\r", "");
             string[] lines = raw.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
             // 💡 2. 어떤 이수구분이든(전탐필, 트랙전선 등) 알아서 잡도록 패턴을 완전 유연화!
             string pattern =
-                @"(?<Type>[가-힣0-9]{2,5})\s+" +       // 1. 첫 번째는 무조건 이수구분
-                @"(?<Code>[A-Za-z]{2,5}\d{4,6})\s+" +  // 2. 두 번째는 학수번호 (이걸 기준으로 잡음)
-                @"(?<Name>.+?)\s+" +                  // 3. 그다음이 과목명
-                @"(?<Credit>\d)\s+" +                 // 4. 숫자가 오면 학점
-                @"(?<Grade>[A-F][+0-]?|P)";           // 5. 마지막 성적
+                @"(?<Type>[가-힣0-9]{2,5})\t" +
+                @"(?<Code>[A-Za-z]{2,5}\d{4,6})\t" +
+                @"(?<Name>.+?)\t" +
+                @"(?<Credit>0\.5|[123])\t" +
+                @"(?<Grade>[A-F][+\-0]?|[AB]0|P)";
             foreach (string line in lines)
             {
                 Match match = Regex.Match(line, pattern);
@@ -399,6 +406,7 @@ namespace WindowsFormsApp2
                 : originalTranscriptText;
 
             subjects = ParseSubjects(parseTarget);
+         
 
             // 💡 [핵심] 성적표 구분(대교)보다 졸업요건표 구분(전공탐색)을 우선시하여 강제 덮어쓰기!
             if (req.코드매핑 != null)
@@ -438,8 +446,39 @@ namespace WindowsFormsApp2
             double firstMajorTotal = firstMajorRequired + firstMajorElective;
 
             // 💡 트랙전필, 트랙전선을 제2전공(심화) 쪽으로 합산하도록 추가!
-            double secondMajorRequired = subjects.Where(s => IsType(s.Type, "복필", "2전필", "제2전필", "트랙전필")).Sum(s => s.Credit);
-            double secondMajorElective = subjects.Where(s => IsType(s.Type, "복선", "2전선", "제2전선", "트랙전선")).Sum(s => s.Credit);
+            // 💡 트랙 선택 시 해당 트랙 과목만 계산
+            double secondMajorRequired = 0;
+            double secondMajorElective = 0;
+
+            if (req.트랙존재여부 && cboTrack.SelectedItem != null && cboTrack.SelectedItem.ToString() != "트랙 미선택")
+            {
+                string selectedTrackName = cboTrack.SelectedItem.ToString();
+                var targetTrack = req.트랙목록.FirstOrDefault(t => t.TrackName == selectedTrackName);
+
+                if (targetTrack != null)
+                {
+                    // 트랙 필수: 이수한 과목 중 트랙 전필 과목에 해당하는 것
+                    secondMajorRequired = subjects
+                        .Where(s => targetTrack.TrackRequiredSubjects
+                            .Any(r => NormalizeSubjectKey(r).Contains(NormalizeSubjectKey(s.Name)) ||
+                                        NormalizeSubjectKey(s.Name).Contains(NormalizeSubjectKey(r))))
+                        .Sum(s => s.Credit);
+
+                    // 트랙 선택: 이수한 과목 중 트랙 전체 과목에 해당하지만 전필이 아닌 것
+                    secondMajorElective = subjects
+                        .Where(s => targetTrack.TrackAllCodes.Contains(s.Code) &&
+                                    !targetTrack.TrackRequiredSubjects
+                                        .Any(r => NormalizeSubjectKey(r).Contains(NormalizeSubjectKey(s.Name)) ||
+                                                    NormalizeSubjectKey(s.Name).Contains(NormalizeSubjectKey(r))))
+                        .Sum(s => s.Credit);
+                }
+            }
+            else
+            {
+                secondMajorRequired = subjects.Where(s => IsType(s.Type, "복필", "2전필", "제2전필", "트랙전필")).Sum(s => s.Credit);
+                secondMajorElective = subjects.Where(s => IsType(s.Type, "복선", "2전선", "제2전선", "트랙전선")).Sum(s => s.Credit);
+            }
+
             double secondMajorTotal = secondMajorRequired + secondMajorElective;
             string secondBaseName = req.트랙존재여부 ? "트랙" : "제2전공";
 
@@ -493,13 +532,12 @@ namespace WindowsFormsApp2
             // 💡 대학교양 통합 카드 꼼수 세팅
             cards["univReq"].Title.Text = "대학교양(통합)";
             SetCard("univReq", universityRequired + universityElective, req.대학교양필수 + req.대학교양선택);
-            cards["univElec"].Title.Text = "-";
-            SetCardDisplayOnly("univElec", 0);
+            
+            
 
             // 💡 교양소계 카드 세팅
             SetCard("liberalTotal", liberalTotal, req.교양소계);
-            SetCardDisplayOnly("exploreReq", exploreRequired);
-            SetCardDisplayOnly("exploreElec", exploreElective);
+            
             SetCard("exploreTotal", exploreTotal, req.전공탐색);
             SetCard("firstMajorReq", firstMajorRequired, req.전공필수);
             SetCard("firstMajorElec", firstMajorElective, req.전공선택);

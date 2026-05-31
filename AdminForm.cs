@@ -42,6 +42,7 @@ namespace WindowsFormsApp2
         {
             public string TrackName { get; set; }
             public List<string> TrackRequiredSubjects { get; set; } = new List<string>();
+            public List<string> TrackAllCodes { get; set; } = new List<string>(); // 추가
         }
 
         public class Subject
@@ -191,10 +192,50 @@ namespace WindowsFormsApp2
                 Regex trackRegex = new Regex(@"([①-⑩]|\d+\.)\s*(?<TrackName>[가-힣a-zA-Z0-9]+)\s*트랙", RegexOptions.Compiled);
 
                 TrackInfo currentTrack = null;
-                string currentContext = ""; // 💡 현재 읽고 있는 줄이 무슨 영역인지 기억
+                string currentContext = "";
+                bool inExploreSection = false; // 💡 추가
 
                 foreach (string line in lines)
                 {
+                    Match trackMatch = trackRegex.Match(line);
+                    if (trackMatch.Success)
+                    {
+                        inExploreSection = false; // 트랙 시작되면 전공탐색 섹션 강제 종료
+                        currentTrack = new TrackInfo { TrackName = trackMatch.Groups["TrackName"].Value };
+                        req.Tracks.Add(currentTrack);
+                        continue;
+                    }
+                    if (currentTrack != null)
+                    {
+                        Match codeMatch = Regex.Match(line, @"(?<Code>[A-Z]{3,4}\d{4,6})");
+                        if (codeMatch.Success)
+                        {
+                            string code = codeMatch.Groups["Code"].Value;
+                            if (!currentTrack.TrackAllCodes.Contains(code))
+                                currentTrack.TrackAllCodes.Add(code);
+                        }
+                    }
+
+                    // 💡 전공탐색 배정표 파싱 (기존 코드보다 위에 있어야 함!)
+                    if (line.Contains("전공탐색 이수배정표") || (line.Contains("전공탐색") && line.Contains("배정표")))
+                    {
+                        inExploreSection = true;
+                        continue;
+                    }
+                    if (inExploreSection && line.Contains("이수학점계"))
+                    {
+                        inExploreSection = false;
+                    }
+                    if (inExploreSection)
+                    {
+                        Match exploreMatch = Regex.Match(line, @"(?<Code>[A-Za-z]{2,5}\d{4,6})");
+                        if (exploreMatch.Success)
+                        {
+                            string code = exploreMatch.Groups["Code"].Value;
+                            req.SubjectMapping[code] = "전탐필";
+                        }
+                        continue;
+                    }
                     // 영역 키워드를 발견하면 컨텍스트 업데이트
                     if (line.Contains("전공탐색") || line.Contains("전탐")) currentContext = "전공탐색";
                     else if (line.Contains("전공필수") || line.Contains("전필")) currentContext = "전필";
@@ -202,13 +243,7 @@ namespace WindowsFormsApp2
                     else if (line.Contains("교양기초")) currentContext = "교양기초";
                     else if (line.Contains("대학교양")) currentContext = "대교";
 
-                    Match trackMatch = trackRegex.Match(line);
-                    if (trackMatch.Success)
-                    {
-                        currentTrack = new TrackInfo { TrackName = trackMatch.Groups["TrackName"].Value };
-                        req.Tracks.Add(currentTrack);
-                        continue;
-                    }
+                    
 
                     // 과목을 발견하면 맵핑 사전에 등록!
                     Match m = subjectRegex.Match(line);
@@ -315,8 +350,12 @@ namespace WindowsFormsApp2
                             트랙존재여부 = (hasTrack == DialogResult.Yes),
                             트랙목록 = parsedData.Tracks,
                             코드매핑 = parsedData.SubjectMapping
-                        }; 
+                        };
                         // 5. 리스트에 추가하고 그리드 새로고침
+                        newReq.전탐필코드목록 = newReq.코드매핑
+                            .Where(kv => kv.Value == "전탐필")
+                            .Select(kv => kv.Key)
+                            .ToList();
                         requirements.Add(newReq);
                         RefreshGrid();
 
