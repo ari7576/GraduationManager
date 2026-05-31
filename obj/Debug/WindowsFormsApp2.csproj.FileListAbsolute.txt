@@ -91,3 +91,4 @@ C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsF.EA766
 C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.exe
 C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.pdb
 C:\Users\castl\OneDrive\바탕 화면\GraduationManager\obj\Debug\WindowsFormsApp2.TypeChangeForm.resources
+C:\Users\sw\Source\Repos\GraduationManager\obj\Debug\WindowsFormsApp2.TypeChangeForm.resources

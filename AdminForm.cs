@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -73,6 +74,7 @@ namespace WindowsFormsApp2
             public int 제2전공선택 { get; set; }
 
             public List<string> 필수과목목록 { get; set; } = new List<string>();
+            public List<string> 전탐필코드목록 { get; set; } = new List<string>();
             public bool 제2전공필수여부 { get; set; } = false;
             public bool 트랙존재여부 { get; set; } = false;
             public List<TrackInfo> 트랙목록 { get; set; } = new List<TrackInfo>();
@@ -450,6 +452,35 @@ namespace WindowsFormsApp2
                 // 팝업 띄우기
                 jsonForm.ShowDialog();
             }
+        }
+
+        private void btnEditExploreReq_Click(object sender, EventArgs e)
+        {
+            if (dgvRequirements.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("전탐필 코드를 관리할 졸업요건을 먼저 선택하세요!");
+                return;
+            }
+
+            int index = dgvRequirements.SelectedRows[0].Index;
+            GraduationRequirement req = requirements[index];
+
+            string current = string.Join(", ", req.전탐필코드목록);
+            string input = Interaction.InputBox(
+                "전탐필 과목코드를 쉼표로 구분해서 입력하세요\n예: YHL1007, YHL1008, YHV1001",
+                "전탐필 코드 관리",
+                current);
+
+            if (string.IsNullOrEmpty(input)) return;
+
+            req.전탐필코드목록 = new List<string>(
+                input.Split(',')
+                .Select(s => s.Trim())
+                .Where(s => !string.IsNullOrEmpty(s))
+                .ToList()
+            );
+
+            MessageBox.Show($"전탐필 코드 {req.전탐필코드목록.Count}개 저장되었습니다!");
         }
     }
     public class TextPasteForm : Form

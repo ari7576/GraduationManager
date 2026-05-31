@@ -422,8 +422,15 @@ namespace WindowsFormsApp2
             double universityElective = subjects.Where(s => IsType(s.Type, "대교", "대선", "교선", "대학교양")).Sum(s => s.Credit);
             double liberalTotal = liberalBasic + universityRequired + universityElective;
 
-            double exploreRequired = subjects.Where(s => IsType(s.Type, "탐필", "전탐필")).Sum(s => s.Credit);
-            double exploreElective = subjects.Where(s => IsType(s.Type, "탐선", "전탐", "전탐선", "전공탐색")).Sum(s => s.Credit);
+            double exploreRequired = subjects.Where(s =>
+            IsType(s.Type, "탐필", "전탐필") ||
+            (IsType(s.Type, "전탐") && req.전탐필코드목록.Contains(s.Code))
+            ).Sum(s => s.Credit);
+
+            double exploreElective = subjects.Where(s =>
+                IsType(s.Type, "탐선", "전탐선", "전공탐색") ||
+                (IsType(s.Type, "전탐") && !req.전탐필코드목록.Contains(s.Code))
+            ).Sum(s => s.Credit);
             double exploreTotal = exploreRequired + exploreElective;
 
             double firstMajorRequired = subjects.Where(s => IsType(s.Type, "전필", "1전필", "제1전필")).Sum(s => s.Credit);
@@ -491,7 +498,6 @@ namespace WindowsFormsApp2
 
             // 💡 교양소계 카드 세팅
             SetCard("liberalTotal", liberalTotal, req.교양소계);
-
             SetCardDisplayOnly("exploreReq", exploreRequired);
             SetCardDisplayOnly("exploreElec", exploreElective);
             SetCard("exploreTotal", exploreTotal, req.전공탐색);

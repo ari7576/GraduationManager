@@ -32,6 +32,7 @@ namespace WindowsFormsApp2
             this.btnLoad = new System.Windows.Forms.Button();
             this.lblActionTitle = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
+            this.btnEditExploreReq = new System.Windows.Forms.Button();
             this.rootPanel.SuspendLayout();
             this.gridPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRequirements)).BeginInit();
@@ -68,10 +69,9 @@ namespace WindowsFormsApp2
             this.dgvRequirements.AllowUserToDeleteRows = false;
             this.dgvRequirements.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvRequirements.BackgroundColor = System.Drawing.Color.White;
-            this.dgvRequirements.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(241)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("맑은 고딕", 9F);
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(42)))), ((int)(((byte)(76)))));
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -92,6 +92,7 @@ namespace WindowsFormsApp2
             this.dgvRequirements.Name = "dgvRequirements";
             this.dgvRequirements.ReadOnly = true;
             this.dgvRequirements.RowHeadersVisible = false;
+            this.dgvRequirements.RowHeadersWidth = 51;
             this.dgvRequirements.RowTemplate.Height = 28;
             this.dgvRequirements.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvRequirements.Size = new System.Drawing.Size(986, 390);
@@ -111,6 +112,7 @@ namespace WindowsFormsApp2
             // 
             this.actionPanel.BackColor = System.Drawing.Color.White;
             this.actionPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.actionPanel.Controls.Add(this.btnEditExploreReq);
             this.actionPanel.Controls.Add(this.button1);
             this.actionPanel.Controls.Add(this.btnSave);
             this.actionPanel.Controls.Add(this.btnDelete);
@@ -233,9 +235,24 @@ namespace WindowsFormsApp2
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "졸업요건 관리자";
             // 
+            // btnEditExploreReq
+            // 
+            this.btnEditExploreReq.BackColor = System.Drawing.Color.White;
+            this.btnEditExploreReq.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(215)))), ((int)(((byte)(225)))));
+            this.btnEditExploreReq.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEditExploreReq.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold);
+            this.btnEditExploreReq.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(95)))));
+            this.btnEditExploreReq.Location = new System.Drawing.Point(716, 45);
+            this.btnEditExploreReq.Name = "btnEditExploreReq";
+            this.btnEditExploreReq.Size = new System.Drawing.Size(150, 34);
+            this.btnEditExploreReq.TabIndex = 7;
+            this.btnEditExploreReq.Text = "전탐필 코드 관리";
+            this.btnEditExploreReq.UseVisualStyleBackColor = false;
+            this.btnEditExploreReq.Click += new System.EventHandler(this.btnEditExploreReq_Click);
+            // 
             // AdminForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
             this.ClientSize = new System.Drawing.Size(1088, 702);
@@ -268,5 +285,6 @@ namespace WindowsFormsApp2
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Label lblActionTitle;
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Button btnEditExploreReq;
     }
 }
