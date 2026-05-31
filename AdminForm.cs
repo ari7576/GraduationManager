@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -36,6 +37,12 @@ namespace WindowsFormsApp2
             }
         }
 
+        public class TrackInfo
+        {
+            public string TrackName { get; set; }
+            public List<string> TrackRequiredSubjects { get; set; } = new List<string>();
+        }
+
         public class Subject
         {
             public string 이수구분 { get; set; }
@@ -55,6 +62,9 @@ namespace WindowsFormsApp2
             public int 교양기초 { get; set; }
             public int 전공탐색 { get; set; }
             public List<string> 필수과목목록 { get; set; } = new List<string>();
+            public bool 제2전공필수여부 { get; set; } = false;
+            public bool 트랙존재여부 { get; set; } = false;
+            public List<TrackInfo> 트랙목록 { get; set; } = new List<TrackInfo>(); // 💡 추가!
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -84,6 +94,7 @@ namespace WindowsFormsApp2
             public int GeneralElective { get; set; }
             public int MajorExploration { get; set; } // 전공탐색 (추가됨)
             public List<string> RequiredSubjects { get; set; } = new List<string>();
+            public List<TrackInfo> Tracks { get; set; } = new List<TrackInfo>(); // 💡 추가!
         }
 
         public class RequirementParser
@@ -117,22 +128,42 @@ namespace WindowsFormsApp2
                 // 2. 필수 과목 추출 로직 보강
                 string[] lines = rawText.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-                // 수정된 정규식: 학수번호 뒤에 선택적으로 오는 학정번호(4자리 숫자)를 무시하고 과목명을 정확히 캡처
                 Regex subjectRegex = new Regex(@"[A-Z]{3}\d{4}\s+(?:\d{4}\s+)?(?<SubjName>[가-힣a-zA-Z0-9\(\)Ⅰ-Ⅹ]+)", RegexOptions.Compiled);
+                // 트랙 이름 추출 정규식 (예: "① AI빅데이터 트랙" 에서 "AI빅데이터"만 쏙 빼냄)
+                Regex trackRegex = new Regex(@"([①-⑩]|\d+\.)\s*(?<TrackName>[가-힣a-zA-Z0-9]+)\s*트랙", RegexOptions.Compiled);
+
+                TrackInfo currentTrack = null; // 현재 파싱 중인 트랙
 
                 foreach (string line in lines)
                 {
-                    // "전필" 키워드 추가
-                    if (line.Contains("전필") || line.Contains("필수") || line.Contains("트랙 전필"))
+                    // 1. 트랙 제목 줄인지 검사
+                    Match trackMatch = trackRegex.Match(line);
+                    if (trackMatch.Success)
+                    {
+                        currentTrack = new TrackInfo { TrackName = trackMatch.Groups["TrackName"].Value };
+                        req.Tracks.Add(currentTrack);
+                        continue;
+                    }
+
+                    // 2. 모든 트랙 공통 필수 과목 (트랙 전필이라는 글자가 '없어야' 함)
+                    if ((line.Contains("전필") || line.Contains("필수")) && !line.Contains("트랙 전필") && !line.Contains("트랙전필"))
                     {
                         Match m = subjectRegex.Match(line);
                         if (m.Success)
                         {
                             string subjName = m.Groups["SubjName"].Value.Trim();
-                            if (!req.RequiredSubjects.Contains(subjName))
-                            {
-                                req.RequiredSubjects.Add(subjName);
-                            }
+                            if (!req.RequiredSubjects.Contains(subjName)) req.RequiredSubjects.Add(subjName);
+                        }
+                    }
+
+                    // 3. 현재 트랙의 필수 과목 ("트랙 전필" 글자가 있는 경우)
+                    if (line.Contains("트랙 전필") || line.Contains("트랙전필"))
+                    {
+                        Match m = subjectRegex.Match(line);
+                        if (m.Success && currentTrack != null)
+                        {
+                            string subjName = m.Groups["SubjName"].Value.Trim();
+                            if (!currentTrack.TrackRequiredSubjects.Contains(subjName)) currentTrack.TrackRequiredSubjects.Add(subjName);
                         }
                     }
                 }
@@ -183,11 +214,16 @@ namespace WindowsFormsApp2
                         string 학과 = Microsoft.VisualBasic.Interaction.InputBox("학과를 입력하세요", "학과 입력", "소프트웨어학부");
                         string 년도str = Microsoft.VisualBasic.Interaction.InputBox("적용할 입학년도(학번)를 입력하세요", "학번 입력", "2024");
 
+
+
                         if (!int.TryParse(년도str, out int year))
                         {
                             MessageBox.Show("입학년도는 숫자로 입력해야 합니다. 추가가 취소되었습니다.");
                             return;
                         }
+
+                        DialogResult isDoubleMajor = MessageBox.Show($"[{학과}]는 제2전공(복수/심화) 이수가 필수입니까?", "제2전공 필수 확인", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        DialogResult hasTrack = MessageBox.Show($"[{학과}]는 트랙(Track) 제도를 운영합니까?", "트랙 제도 확인", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                         // 4. 파싱된 데이터를 관리자용 객체에 매핑
                         GraduationRequirement newReq = new GraduationRequirement
@@ -199,9 +235,13 @@ namespace WindowsFormsApp2
                             전공선택 = parsedData.MajorElective,
                             교양기초 = parsedData.GeneralRequired,
                             전공탐색 = parsedData.MajorExploration,
-                            필수과목목록 = parsedData.RequiredSubjects
-                        };
+                            필수과목목록 = parsedData.RequiredSubjects,
 
+                            // 💡 [복구 부분] 팝업 응답 결과 저장
+                            제2전공필수여부 = (isDoubleMajor == DialogResult.Yes),
+                            트랙존재여부 = (hasTrack == DialogResult.Yes),
+                            트랙목록 = parsedData.Tracks // 💡 파싱된 트랙 데이터 넘겨주기 추가!
+                        };
                         // 5. 리스트에 추가하고 그리드 새로고침
                         requirements.Add(newReq);
                         RefreshGrid();

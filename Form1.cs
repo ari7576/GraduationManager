@@ -27,8 +27,15 @@ namespace WindowsFormsApp2
             CalculateAndRender();
         }
 
-        
 
+        private void cboTrack_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 콤보박스가 생성되기 전이거나 값이 비어있을 때 발생하는 오류 방지
+            if (cboTrack == null || cboTrack.SelectedItem == null) return;
+
+            // 트랙이 변경되었으므로, 화면을 다시 싹 계산해서 그립니다.
+            CalculateAndRender();
+        }
         private class Requirement
         {
             public int TotalCredit = 130;
@@ -341,6 +348,44 @@ namespace WindowsFormsApp2
                 return;
             }
 
+            if (req.트랙존재여부 && req.트랙목록 != null && req.트랙목록.Count > 0)
+            {
+                lblTrack.Visible = true;
+                cboTrack.Visible = true;
+
+                // 1. 방금 내가 선택했던 트랙 이름을 잠깐 기억해 둡니다.
+                string currentSelection = cboTrack.SelectedItem?.ToString();
+
+                // 무한 루프 에러 방지를 위해 잠시 이벤트 연결 끊기
+                cboTrack.SelectedIndexChanged -= cboTrack_SelectedIndexChanged;
+
+                // 2. 콤보박스 싹 비우고 다시 채우기
+                cboTrack.Items.Clear();
+                cboTrack.Items.Add("트랙 미선택");
+                foreach (var track in req.트랙목록)
+                {
+                    cboTrack.Items.Add(track.TrackName);
+                }
+
+                // 3. 아까 기억해둔 값이 새로 채운 목록에 있다면 그걸로 다시 선택! 없으면 미선택(0번)
+                if (!string.IsNullOrEmpty(currentSelection) && cboTrack.Items.Contains(currentSelection))
+                {
+                    cboTrack.SelectedItem = currentSelection;
+                }
+                else
+                {
+                    cboTrack.SelectedIndex = 0;
+                }
+
+                // 이벤트 복구
+                cboTrack.SelectedIndexChanged += cboTrack_SelectedIndexChanged;
+            }
+            else
+            {
+                lblTrack.Visible = false;
+                cboTrack.Visible = false;
+            }
+
             // 4. 성적표 텍스트 파싱 (내 이수 내역)
             string parseTarget = string.IsNullOrWhiteSpace(originalTranscriptText)
                 ? txtRawInput.Text
@@ -391,9 +436,28 @@ namespace WindowsFormsApp2
             AddStatusRow("제1전공 선택", req.전공선택, firstMajorElective);
             AddStatusRow("제1전공 소계", req.전공필수 + req.전공선택, firstMajorTotal);
 
-            AddStatusRow("제2전공 필수", req.전공필수, secondMajorRequired);
-            AddStatusRow("제2전공 선택", req.전공선택, secondMajorElective);
-            AddStatusRow("제2전공 소계", req.전공필수 + req.전공선택, secondMajorTotal);
+            if (req.제2전공필수여부)
+            {
+                AddStatusRow("제2전공 필수", req.전공필수, secondMajorRequired);
+                AddStatusRow("제2전공 선택", req.전공선택, secondMajorElective);
+                AddStatusRow("제2전공 소계", req.전공필수 + req.전공선택, secondMajorTotal);
+
+                SetCard("secondMajorReq", secondMajorRequired, req.전공필수);
+                SetCard("secondMajorElec", secondMajorElective, req.전공선택);
+                SetCard("secondMajorTotal", secondMajorTotal, req.전공필수 + req.전공선택);
+            }
+            else
+            {
+                // 필수가 아니면 분석 페이지(AnalysisForm)에서도 에러로 안 잡히게 DisplayOnly로 처리!
+                AddStatusRowDisplayOnly("제2전공 필수", secondMajorRequired);
+                AddStatusRowDisplayOnly("제2전공 선택", secondMajorElective);
+                AddStatusRowDisplayOnly("제2전공 소계", secondMajorTotal);
+
+                SetCardDisplayOnly("secondMajorReq", secondMajorRequired);
+                SetCardDisplayOnly("secondMajorElec", secondMajorElective);
+                SetCardDisplayOnly("secondMajorTotal", secondMajorTotal);
+                cards["secondMajorTotal"].Status.Text = "선택 사항"; // 카드 라벨 변경
+            }
 
             // 7. 요약 카드 UI 업데이트
             SetCard("total", total, req.총학점기준);
@@ -418,8 +482,33 @@ namespace WindowsFormsApp2
             // 8. 필수 과목 미이수 검사
             List<string> completedKeys = subjects.Select(s => NormalizeSubjectKey(s.Code + " " + s.Name)).ToList();
 
-            List<string> missingRequired = req.필수과목목록
-                .Where(required => !completedKeys.Any(done => done.Contains(NormalizeSubjectKey(required)) | NormalizeSubjectKey(required).Contains(done))).ToList();
+            // 공통 필수과목 목록 가져오기
+            List<string> currentRequired = new List<string>(req.필수과목목록);
+
+            // 💡 [핵심] 콤보박스에서 선택된 트랙 이름과 JSON의 트랙 데이터를 매칭하여 과목 추가
+            if (req.트랙존재여부 && cboTrack.SelectedItem != null && cboTrack.SelectedIndex > 0)
+            {
+                string selectedTrackName = cboTrack.SelectedItem.ToString();
+
+                // JSON 데이터에서 현재 선택된 트랙 객체를 찾습니다.
+                var targetTrack = req.트랙목록.FirstOrDefault(t => t.TrackName == selectedTrackName);
+
+                if (targetTrack != null)
+                {
+                    currentRequired.AddRange(targetTrack.TrackRequiredSubjects);
+                }
+            }
+
+            // 하드코딩 없이 currentRequired로 최종 검사
+            List<string> missingRequired = currentRequired
+                .Where(required => !completedKeys.Any(done => done.Contains(NormalizeSubjectKey(required)) || NormalizeSubjectKey(required).Contains(done)))
+                .ToList();
+
+            bool isSecondMajorOk = true;
+            if (req.제2전공필수여부)
+            {
+                isSecondMajorOk = (secondMajorRequired >= req.전공필수 && secondMajorElective >= req.전공선택);
+            }
 
             // 모든 조건을 만족했는지 체크
             bool creditsOk = total >= req.총학점기준
@@ -427,16 +516,32 @@ namespace WindowsFormsApp2
                 && exploreTotal >= req.전공탐색
                 && firstMajorRequired >= req.전공필수
                 && firstMajorElective >= req.전공선택
-                && secondMajorRequired >= req.전공필수
-                && secondMajorElective >= req.전공선택;
+                && isSecondMajorOk; // <-- 변경됨
+
             bool overall = creditsOk && missingRequired.Count == 0;
             SetOverallCard(overall);
 
             // 9. 하단 텍스트 업데이트
-            lblShortage.Text = BuildShortageText(req, total, liberalBasic, exploreTotal, firstMajorRequired, firstMajorElective, secondMajorRequired, secondMajorElective);
+            List<string> parts = new List<string>();
+            AddShortage(parts, "총 이수학점", req.총학점기준, total);
+            AddShortage(parts, "교양기초", req.교양기초, liberalBasic);
+            AddShortage(parts, "전공탐색 소계", req.전공탐색, exploreTotal);
+            AddShortage(parts, "제1전공 필수", req.전공필수, firstMajorRequired);
+            AddShortage(parts, "제1전공 선택", req.전공선택, firstMajorElective);
+
+            if (req.제2전공필수여부)
+            {
+                AddShortage(parts, "제2전공 필수", req.전공필수, secondMajorRequired);
+                AddShortage(parts, "제2전공 선택", req.전공선택, secondMajorElective);
+            }
+
+            lblShortage.Text = parts.Count == 0 ? "부족 학점: 없음" : "부족 학점: " + string.Join(" / ", parts.ToArray());
             lblMissingRequired.Text = missingRequired.Count == 0
                 ? "미이수 필수과목: 없음"
                 : "미이수 필수과목: " + string.Join(", ", missingRequired.ToArray());
+
+            // 트랙 알림 추가
+            if (req.트랙존재여부) lblMissingRequired.Text += " (※ 이 학과는 트랙 선택이 필요합니다.)";
         }
 
         // Requirement 타입 대신 AdminForm.GraduationRequirement를 받도록 수정된 BuildShortageText
@@ -541,6 +646,11 @@ namespace WindowsFormsApp2
         {
             double lack = Math.Max(0, required - completed);
             if (lack > 0) parts.Add(name + " " + lack + "학점");
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
